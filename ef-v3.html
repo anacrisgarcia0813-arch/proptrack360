@@ -1,0 +1,1583 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>PropTrack360 — Estructurar Futuro</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --or:#E8541A;--or-d:#C44010;--or-bg:#FEF0EA;
+  --nv:#1E2D5A;--nv-d:#131d3a;--nv-bg:#E8ECFA;
+  --bg:#F2F0EC;--sf:#fff;--sf2:#F7F5F1;
+  --tx:#1A1814;--tx2:#5A5750;--tx3:#A09D98;
+  --bd:#E5E2DC;
+  --gn:#1A7A4A;--gn-bg:#E8F5EE;
+  --rd:#B83030;--rd-bg:#FCEAEA;
+  --am:#8A5C00;--am-bg:#FDF3DC;
+  --r:12px;
+}
+html.dark{
+  --bg:#111215;--sf:#1A1C20;--sf2:#22252A;
+  --tx:#F0EDE8;--tx2:#A09D98;--tx3:#6A6760;
+  --bd:#2E3138;
+  --or-bg:#2A1A10;--nv-bg:#111828;
+  --gn-bg:#0E2018;--rd-bg:#2A0F0F;--am-bg:#231800;
+}
+html,body{height:100%;background:var(--bg);color:var(--tx);font-family:'DM Sans',sans-serif;font-size:14px;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+@keyframes barIn{from{width:0}to{width:var(--w)}}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.au{animation:fadeUp .3s ease both;}
+.au2{animation:fadeUp .3s .06s ease both;}
+.au3{animation:fadeUp .3s .12s ease both;}
+.au4{animation:fadeUp .3s .18s ease both;}
+.au5{animation:fadeUp .3s .24s ease both;}
+.au6{animation:fadeUp .3s .3s ease both;}
+
+/* LOGIN */
+.lw{min-height:100vh;display:flex;}
+.ll{background:var(--nv);width:44%;display:flex;flex-direction:column;justify-content:space-between;padding:48px 40px;position:relative;overflow:hidden;}
+.ll::before{content:'';position:absolute;bottom:-80px;right:-80px;width:320px;height:320px;border-radius:50%;background:rgba(232,84,26,.1);}
+.ll::after{content:'';position:absolute;top:-60px;left:-60px;width:200px;height:200px;border-radius:50%;background:rgba(255,255,255,.02);}
+.ll-bars{display:flex;gap:4px;align-items:flex-end;margin-bottom:6px;}
+.ll-bar{background:var(--or);border-radius:2px;}
+.ll-brand{color:#fff;font-family:'Playfair Display',serif;font-size:15px;font-weight:600;letter-spacing:.4px;}
+.ll-headline{color:#fff;font-family:'Playfair Display',serif;font-size:30px;font-weight:600;line-height:1.3;z-index:1;position:relative;}
+.ll-headline em{color:var(--or);font-style:normal;}
+.ll-desc{color:rgba(255,255,255,.5);font-size:13px;margin-top:10px;line-height:1.7;z-index:1;position:relative;}
+.ll-mods{display:flex;flex-direction:column;gap:7px;z-index:1;position:relative;}
+.ll-mod{display:flex;align-items:center;gap:9px;padding:9px 13px;background:rgba(255,255,255,.05);border-radius:8px;border:1px solid rgba(255,255,255,.07);}
+.ll-mod-dot{width:7px;height:7px;border-radius:50%;background:var(--or);flex-shrink:0;}
+.ll-mod-txt{font-size:12px;color:rgba(255,255,255,.65);}
+.lr{flex:1;display:flex;align-items:center;justify-content:center;padding:40px;background:var(--bg);}
+.lcard{width:100%;max-width:360px;}
+.lcard-title{font-family:'Playfair Display',serif;font-size:26px;font-weight:600;margin-bottom:4px;}
+.lcard-sub{font-size:13px;color:var(--tx3);margin-bottom:28px;}
+.lf{margin-bottom:13px;}
+.lf label{font-size:12px;font-weight:500;color:var(--tx2);display:block;margin-bottom:4px;}
+.lf input{width:100%;padding:10px 13px;border:1.5px solid var(--bd);border-radius:9px;font-size:14px;font-family:'DM Sans',sans-serif;color:var(--tx);background:var(--sf);outline:none;transition:border .15s;}
+.lf input:focus{border-color:var(--or);}
+.l-hint{font-size:11px;color:var(--tx3);margin-bottom:14px;}
+.l-btn{width:100%;padding:12px;background:var(--or);color:#fff;border:none;border-radius:9px;font-size:14px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;transition:background .15s;margin-bottom:20px;}
+.l-btn:hover{background:var(--or-d);}
+.l-roles-t{font-size:11px;color:var(--tx3);margin-bottom:9px;padding-top:16px;border-top:1px solid var(--bd);}
+.l-roles{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;}
+.l-role{padding:8px 9px;border:1.5px solid var(--bd);border-radius:8px;cursor:pointer;background:var(--sf);transition:all .15s;text-align:left;}
+.l-role:hover{border-color:var(--or);background:var(--or-bg);}
+.l-role-n{font-size:12px;font-weight:600;color:var(--tx);}
+.l-role-d{font-size:10px;color:var(--tx3);margin-top:1px;}
+
+/* SHELL */
+.shell{display:flex;min-height:100vh;}
+.sb{width:218px;flex-shrink:0;background:var(--nv);display:flex;flex-direction:column;position:sticky;top:0;height:100vh;transition:left .25s ease;}
+#drawer-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:149;}
+.ham-btn{display:none;cursor:pointer;font-size:20px;line-height:1;padding:4px 8px;border-radius:6px;color:var(--tx);user-select:none;}
+.ham-btn:hover{background:var(--sf2);}
+.sb-brand{padding:18px 13px 14px;border-bottom:1px solid rgba(255,255,255,.07);}
+.sb-bars{display:flex;gap:3px;align-items:flex-end;margin-bottom:3px;}
+.sb-bar{background:var(--or);border-radius:2px;}
+.sb-name{color:#fff;font-family:'Playfair Display',serif;font-size:13px;font-weight:600;}
+.sb-tag{font-size:10px;color:rgba(255,255,255,.25);}
+.sb-nav{flex:1;overflow-y:auto;padding:8px 7px;}
+.sb-nav::-webkit-scrollbar{width:0;}
+.ngl{font-size:9px;color:rgba(255,255,255,.22);letter-spacing:.1em;text-transform:uppercase;padding:11px 8px 4px;}
+.ni{display:flex;align-items:center;gap:8px;padding:8px 9px;border-radius:8px;cursor:pointer;margin-bottom:2px;transition:background .12s;}
+.ni svg{width:14px;height:14px;flex-shrink:0;color:rgba(255,255,255,.35);transition:color .12s;}
+.ni .nl{font-size:12px;color:rgba(255,255,255,.4);transition:color .12s;flex:1;}
+.ni .nb{background:var(--rd);color:#fff;font-size:9px;padding:1px 5px;border-radius:9px;font-weight:600;}
+.ni:hover{background:rgba(255,255,255,.06);}
+.ni:hover svg,.ni:hover .nl{color:rgba(255,255,255,.8);}
+.ni.on{background:var(--or);}
+.ni.on svg,.ni.on .nl{color:#fff;}
+.sb-foot{padding:8px 7px 14px;border-top:1px solid rgba(255,255,255,.07);}
+.sb-user{display:flex;align-items:center;gap:8px;padding:8px 9px;border-radius:8px;}
+.sb-av{width:28px;height:28px;border-radius:50%;background:var(--or);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:600;color:#fff;flex-shrink:0;}
+.sb-un{font-size:12px;color:rgba(255,255,255,.65);font-weight:500;}
+.sb-ur{font-size:10px;color:rgba(255,255,255,.28);}
+.sb-out{display:flex;align-items:center;gap:7px;padding:7px 9px;border-radius:8px;cursor:pointer;margin-top:1px;}
+.sb-out:hover{background:rgba(232,84,26,.15);}
+.sb-out span{font-size:12px;color:rgba(255,255,255,.35);}
+.sb-out:hover span{color:var(--or);}
+
+/* MAIN */
+.main{flex:1;display:flex;flex-direction:column;min-width:0;}
+.topbar{display:flex;align-items:center;gap:10px;padding:13px 22px;background:var(--sf);border-bottom:1.5px solid var(--bd);position:sticky;top:0;z-index:50;}
+.tb-title{font-size:15px;font-weight:600;flex:1;}
+.tb-sub{font-size:11px;color:var(--tx3);}
+.tb-notif{width:32px;height:32px;border-radius:8px;border:1.5px solid var(--bd);display:flex;align-items:center;justify-content:center;cursor:pointer;position:relative;}
+.tb-notif:hover{background:var(--sf2);}
+.tb-icon-btn{width:32px;height:32px;border-radius:8px;border:1.5px solid var(--bd);display:flex;align-items:center;justify-content:center;cursor:pointer;background:none;color:var(--tx2);flex-shrink:0;}
+.tb-icon-btn:hover{background:var(--sf2);color:var(--tx);}
+.n-pip{position:absolute;top:6px;right:6px;width:5px;height:5px;border-radius:50%;background:var(--rd);animation:pulse 2s infinite;}
+.pc{flex:1;padding:18px 22px;}
+.page{display:none;}
+.page.on{display:block;}
+
+/* COMPONENTS */
+.krow{display:grid;gap:11px;margin-bottom:14px;}
+.k4{grid-template-columns:repeat(4,minmax(0,1fr));}
+.k3{grid-template-columns:repeat(3,minmax(0,1fr));}
+.k2{grid-template-columns:1fr 1fr;}
+.kpi{background:var(--sf);border:1.5px solid var(--bd);border-radius:var(--r);padding:15px 17px;transition:border-color .2s,transform .15s;cursor:default;}
+.kpi:hover{border-color:var(--or);transform:translateY(-1px);}
+.ki{width:34px;height:34px;border-radius:9px;display:flex;align-items:center;justify-content:center;margin-bottom:10px;}
+.kl{font-size:11px;font-weight:500;color:var(--tx3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;}
+.kv{font-size:25px;font-weight:600;font-family:'DM Mono',monospace;letter-spacing:-1px;line-height:1;}
+.kd{font-size:12px;margin-top:4px;}
+.r2{display:grid;grid-template-columns:1fr 1fr;gap:13px;margin-bottom:13px;}
+.r3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:13px;margin-bottom:13px;}
+.r13{display:grid;grid-template-columns:1fr 2fr;gap:13px;margin-bottom:13px;}
+.r31{display:grid;grid-template-columns:2fr 1fr;gap:13px;margin-bottom:13px;}
+.card{background:var(--sf);border:1.5px solid var(--bd);border-radius:var(--r);padding:17px;}
+.fc{background:var(--sf);border:1.5px solid var(--bd);border-radius:var(--r);padding:17px;margin-bottom:13px;}
+.ch{display:flex;align-items:center;justify-content:space-between;margin-bottom:13px;}
+.ct{font-size:14px;font-weight:600;}
+.badge{display:inline-flex;align-items:center;font-size:11px;padding:3px 9px;border-radius:20px;font-weight:500;}
+.bor{background:var(--or-bg);color:var(--or-d);}
+.bnv{background:var(--nv-bg);color:var(--nv);}
+.bgn{background:var(--gn-bg);color:var(--gn);}
+.brd{background:var(--rd-bg);color:var(--rd);}
+.bam{background:var(--am-bg);color:var(--am);}
+.btx{background:var(--sf2);color:var(--tx3);}
+.bar-row{margin-bottom:12px;}
+.bar-row:last-child{margin-bottom:0;}
+.bt{display:flex;justify-content:space-between;align-items:center;margin-bottom:5px;}
+.bn2{font-size:13px;font-weight:500;}
+.bp{font-size:13px;font-family:'DM Mono',monospace;font-weight:600;}
+.btr{height:9px;background:var(--sf2);border-radius:4px;overflow:hidden;}
+.bf{height:100%;border-radius:4px;animation:barIn .8s ease both;}
+.for{background:var(--or);}
+.fnv{background:var(--nv);}
+.fam{background:#C47C00;}
+.frd{background:var(--rd);}
+.fgn{background:var(--gn);}
+.bch{display:flex;gap:9px;margin-top:3px;flex-wrap:wrap;}
+.bc{font-size:11px;color:var(--tx3);}
+.tbl{width:100%;border-collapse:collapse;font-size:13px;}
+.tbl th{font-size:11px;font-weight:500;color:var(--tx3);text-transform:uppercase;letter-spacing:.4px;padding:6px 9px;text-align:left;border-bottom:1.5px solid var(--bd);}
+.tbl td{padding:9px 9px;border-bottom:1px solid var(--sf2);}
+.tbl tr:last-child td{border-bottom:none;}
+.tbl tr:hover td{background:var(--bg);}
+.tag{display:inline-block;font-size:11px;padding:2px 7px;border-radius:9px;font-weight:500;}
+.tgn{background:var(--gn-bg);color:var(--gn);}
+.trd{background:var(--rd-bg);color:var(--rd);}
+.tam{background:var(--am-bg);color:var(--am);}
+.tor{background:var(--or-bg);color:var(--or-d);}
+.tnv{background:var(--nv-bg);color:var(--nv);}
+.ttx{background:var(--sf2);color:var(--tx3);}
+.ai{display:flex;gap:10px;padding:10px 0;border-bottom:1px solid var(--sf2);}
+.ai:last-child{border-bottom:none;}
+.adot{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:4px;}
+.drd{background:var(--rd);}
+.dam{background:#C47C00;}
+.dnv{background:var(--nv);}
+.dor{background:var(--or);}
+.dgn{background:var(--gn);}
+.at{font-size:13px;line-height:1.5;}
+.ati{font-size:11px;color:var(--tx3);margin-top:2px;}
+.btn{display:inline-flex;align-items:center;gap:5px;padding:8px 15px;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;border:1.5px solid transparent;font-family:'DM Sans',sans-serif;transition:all .15s;}
+.btp{background:var(--or);color:#fff;border-color:var(--or);}
+.btp:hover{background:var(--or-d);}
+.bts{background:var(--sf);color:var(--tx2);border-color:var(--bd);}
+.bts:hover{background:var(--sf2);}
+.btn-nv{background:var(--nv);color:#fff;border-color:var(--nv);}
+.btn-nv:hover{background:var(--nv-d);}
+.btn-gn{background:var(--gn);color:#fff;border-color:var(--gn);}
+.btn-rd{background:var(--rd-bg);color:var(--rd);border-color:var(--rd);}
+.btn-sm{padding:4px 10px;font-size:11px;}
+.fgrid{display:grid;grid-template-columns:1fr 1fr;gap:11px;}
+.fg{display:flex;flex-direction:column;gap:4px;}
+.fg.full{grid-column:1/-1;}
+.flabel{font-size:12px;font-weight:500;color:var(--tx2);}
+.finput,.fsel,.fta{width:100%;padding:8px 11px;border:1.5px solid var(--bd);border-radius:8px;font-size:13px;font-family:'DM Sans',sans-serif;color:var(--tx);background:var(--sf);outline:none;transition:border .15s;}
+.finput:focus,.fsel:focus,.fta:focus{border-color:var(--or);}
+.fta{resize:vertical;min-height:72px;}
+.faction{display:flex;gap:9px;margin-top:12px;}
+.upz{border:2px dashed var(--bd);border-radius:9px;padding:22px;text-align:center;cursor:pointer;transition:all .2s;background:var(--sf2);}
+.upz:hover,.upz.drag{border-color:var(--or);background:var(--or-bg);}
+.upz-ico{width:38px;height:38px;border-radius:50%;background:var(--sf);border:1.5px solid var(--bd);display:flex;align-items:center;justify-content:center;margin:0 auto 9px;}
+.upz-t{font-size:13px;font-weight:600;margin-bottom:3px;}
+.upz-s{font-size:12px;color:var(--tx3);}
+input[type=file]{display:none;}
+.fl{display:flex;flex-direction:column;gap:7px;margin-top:12px;}
+.fitem{display:flex;align-items:center;gap:9px;padding:9px 13px;background:var(--sf2);border-radius:8px;border:1px solid var(--bd);}
+.fic{width:30px;height:30px;border-radius:7px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.fpdf{background:var(--rd-bg);}
+.fcsv{background:var(--gn-bg);}
+.fimg{background:var(--nv-bg);}
+.fxls{background:var(--am-bg);}
+.fn{font-size:13px;font-weight:500;flex:1;}
+.fs{font-size:11px;color:var(--tx3);}
+.fdel{width:22px;height:22px;border-radius:5px;border:none;background:transparent;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--tx3);}
+.fdel:hover{background:var(--rd-bg);color:var(--rd);}
+.stat-row{display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--sf2);}
+.stat-row:last-child{border-bottom:none;}
+.sl{font-size:13px;color:var(--tx2);}
+.sv{font-size:13px;font-family:'DM Mono',monospace;font-weight:500;}
+.lock-pg{display:flex;align-items:center;justify-content:center;min-height:300px;flex-direction:column;gap:11px;text-align:center;}
+.lock-ic{width:52px;height:52px;border-radius:50%;background:var(--sf2);border:1.5px solid var(--bd);display:flex;align-items:center;justify-content:center;margin-bottom:2px;}
+.toast-wrap{position:fixed;bottom:22px;right:22px;display:flex;flex-direction:column;gap:7px;z-index:9999;}
+.toast{background:var(--nv);color:#fff;padding:11px 16px;border-radius:9px;font-size:13px;display:flex;align-items:center;gap:9px;animation:fadeUp .3s ease;border-left:4px solid var(--or);min-width:240px;}
+.toast.success{border-left-color:var(--gn);}
+.toast.error{border-left-color:var(--rd);}
+.toast.info{border-left-color:var(--nv-bg);}
+.mo{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:200;display:flex;align-items:center;justify-content:center;padding:18px;}
+.mb{background:var(--sf);border-radius:14px;padding:26px;width:100%;max-width:480px;max-height:90vh;overflow-y:auto;}
+.mh{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;}
+.mt2{font-size:16px;font-weight:600;}
+.mc{width:26px;height:26px;border-radius:50%;border:1.5px solid var(--bd);background:var(--sf2);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:13px;color:var(--tx3);}
+.mc:hover{background:var(--bd);}
+.obra-steps{display:flex;margin:11px 0 7px;}
+.os{flex:1;text-align:center;position:relative;}
+.os:not(:last-child)::after{content:'';position:absolute;top:8px;left:60%;width:80%;height:2px;background:var(--bd);}
+.os.done::after{background:var(--or);}
+.osd{width:16px;height:16px;border-radius:50%;margin:0 auto 4px;border:2px solid var(--bd);background:var(--sf2);}
+.os.done .osd{background:var(--or);border-color:var(--or);}
+.os.active .osd{background:var(--sf);border-color:var(--or);box-shadow:0 0 0 3px var(--or-bg);}
+.osl{font-size:9px;color:var(--tx3);}
+.os.done .osl{color:var(--or-d);}
+.os.active .osl{color:var(--nv);font-weight:600;}
+.note{padding:10px 13px;border-radius:8px;font-size:12px;margin-bottom:13px;display:flex;align-items:flex-start;gap:8px;}
+.note-am{background:var(--am-bg);color:var(--am);border:1px solid #dbb84a;}
+.note-rd{background:var(--rd-bg);color:var(--rd);border:1px solid #e08080;}
+.note-gn{background:var(--gn-bg);color:var(--gn);border:1px solid #7dc9a0;}
+.note-nv{background:var(--nv-bg);color:var(--nv);border:1px solid #9aaee0;}
+/* KANBAN */
+.kanban{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:11px;margin-bottom:13px;}
+.kb-col{background:var(--sf2);border-radius:var(--r);padding:12px;}
+.kb-col-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
+.kb-col-t{font-size:12px;font-weight:600;color:var(--tx2);}
+.kb-count{width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:600;}
+.kb-card{background:var(--sf);border:1.5px solid var(--bd);border-radius:9px;padding:11px;margin-bottom:8px;cursor:pointer;transition:border-color .15s,transform .15s;}
+.kb-card:hover{border-color:var(--or);transform:translateY(-1px);}
+.kb-card:last-child{margin-bottom:0;}
+.kb-card-t{font-size:12px;font-weight:600;margin-bottom:4px;}
+.kb-card-s{font-size:11px;color:var(--tx3);}
+.kb-card-ft{display:flex;align-items:center;justify-content:space-between;margin-top:8px;}
+.kb-av{width:20px;height:20px;border-radius:50%;font-size:9px;font-weight:600;display:flex;align-items:center;justify-content:center;color:#fff;}
+/* PIPELINE */
+.pipeline{display:flex;gap:0;margin-bottom:13px;overflow-x:auto;padding-bottom:4px;}
+.pip-stage{min-width:110px;text-align:center;position:relative;flex:1;}
+.pip-stage:not(:last-child)::after{content:'▶';position:absolute;right:-10px;top:50%;transform:translateY(-50%);color:var(--tx3);font-size:11px;z-index:1;}
+.pip-box{padding:12px 8px;border-radius:9px;cursor:pointer;transition:transform .15s;}
+.pip-box:hover{transform:translateY(-2px);}
+.pip-n{font-size:20px;font-weight:700;font-family:'DM Mono',monospace;}
+.pip-l{font-size:11px;margin-top:3px;}
+.pip-val{font-size:11px;font-family:'DM Mono',monospace;margin-top:2px;opacity:.75;}
+/* GANTT mini */
+.gantt{display:flex;flex-direction:column;gap:8px;}
+.gtt-row{display:flex;align-items:center;gap:10px;}
+.gtt-label{font-size:12px;font-weight:500;min-width:130px;color:var(--tx2);}
+.gtt-track{flex:1;height:24px;background:var(--sf2);border-radius:5px;position:relative;overflow:hidden;}
+.gtt-plan{position:absolute;height:100%;border-radius:5px;opacity:.35;}
+.gtt-actual{position:absolute;height:100%;border-radius:5px;}
+.gtt-pct{position:absolute;right:6px;top:50%;transform:translateY(-50%);font-size:10px;font-family:'DM Mono',monospace;font-weight:600;color:#fff;}
+.gtt-legend{display:flex;gap:14px;margin-top:8px;}
+.gtt-leg-item{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--tx3);}
+.gtt-leg-dot{width:10px;height:10px;border-radius:3px;}
+/* LEAD TABLE */
+.agent-bar{display:flex;align-items:center;gap:8px;padding:9px 0;border-bottom:1px solid var(--sf2);}
+.agent-bar:last-child{border-bottom:none;}
+.agent-av{width:30px;height:30px;border-radius:50%;font-size:11px;font-weight:600;display:flex;align-items:center;justify-content:center;color:#fff;flex-shrink:0;}
+.agent-name{font-size:13px;font-weight:500;flex:1;}
+.agent-stats{display:flex;gap:12px;}
+.astat{text-align:center;}
+.astat-v{font-size:14px;font-weight:600;font-family:'DM Mono',monospace;}
+.astat-l{font-size:10px;color:var(--tx3);}
+/* MORA PIPELINE */
+.mora-pipe{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px;margin-bottom:13px;}
+.mp-box{border-radius:10px;padding:13px 10px;text-align:center;cursor:pointer;transition:transform .15s;}
+.mp-box:hover{transform:translateY(-2px);}
+.mp-n{font-size:22px;font-weight:700;font-family:'DM Mono',monospace;}
+.mp-l{font-size:11px;margin-top:3px;}
+.mp-val{font-size:11px;font-family:'DM Mono',monospace;margin-top:2px;opacity:.8;}
+/* INV */
+.inv-header{background:var(--nv);border-radius:var(--r);padding:20px 22px;margin-bottom:13px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:11px;}
+.ih-label{color:rgba(255,255,255,.5);font-size:11px;text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px;}
+.ih-val{color:#fff;font-family:'DM Mono',monospace;font-size:26px;font-weight:700;letter-spacing:-1px;}
+.ih-roi{color:var(--or);font-family:'DM Mono',monospace;font-size:24px;font-weight:700;}
+.inv-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:11px;margin-bottom:13px;}
+.ic{background:var(--sf);border:1.5px solid var(--bd);border-radius:var(--r);padding:15px;transition:border-color .2s;}
+.ic:hover{border-color:var(--or);}
+.in2{font-size:14px;font-weight:600;margin-bottom:2px;}
+.icap{font-size:11px;color:var(--tx3);margin-bottom:11px;}
+/* CHART WRAPPER */
+.chart-wrap{position:relative;width:100%;height:180px;}
+.chart-wrap-lg{position:relative;width:100%;height:220px;}
+.chart-wrap-sm{position:relative;width:100%;height:140px;}
+@media(max-width:768px){
+  .ll{display:none;}.krow.k4{grid-template-columns:1fr 1fr;}.r2,.r3,.r13,.r31{grid-template-columns:1fr;}
+  .kanban{grid-template-columns:1fr 1fr;}.mora-pipe{grid-template-columns:1fr 1fr;}.inv-grid{grid-template-columns:1fr;}
+  .l-roles{grid-template-columns:1fr 1fr;}.fgrid{grid-template-columns:1fr;}
+  .sb{position:fixed;top:0;left:-218px;height:100vh;z-index:150;}
+  .sb.drawer-open{left:0;}
+  #drawer-overlay.drawer-open{display:block;}
+  .ham-btn{display:flex;align-items:center;justify-content:center;}
+  .pc{padding:14px 14px;}
+  .topbar{padding:11px 14px;}
+}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="login-screen">
+<div class="lw">
+  <div class="ll">
+    <div>
+      <div class="ll-bars"><div class="ll-bar" style="width:5px;height:14px"></div><div class="ll-bar" style="width:5px;height:20px"></div><div class="ll-bar" style="width:5px;height:11px"></div></div>
+      <div class="ll-brand">ESTRUCTURAR FUTURO</div>
+    </div>
+    <div>
+      <div class="ll-headline">Estructurando<br>futuro. <em>Juntos.</em></div>
+      <div class="ll-desc">Plataforma integral de control inmobiliario. Información en tiempo real desde cualquier lugar del mundo.</div>
+    </div>
+    <div class="ll-mods">
+      <div class="ll-mod"><div class="ll-mod-dot"></div><div class="ll-mod-txt">Dashboard gerencial con KPIs en tiempo real</div></div>
+      <div class="ll-mod"><div class="ll-mod-dot"></div><div class="ll-mod-txt">Control de cartera, mora y cobranza automatizada</div></div>
+      <div class="ll-mod"><div class="ll-mod-dot"></div><div class="ll-mod-txt">Seguimiento de obra con Gantt y proyecciones</div></div>
+      <div class="ll-mod"><div class="ll-mod-dot"></div><div class="ll-mod-txt">CRM comercial con pipeline de prospectos</div></div>
+      <div class="ll-mod"><div class="ll-mod-dot"></div><div class="ll-mod-txt">7 roles con permisos diferenciados y seguros</div></div>
+    </div>
+  </div>
+  <div class="lr">
+    <div class="lcard au">
+      <div class="lcard-title">Bienvenido</div>
+      <div class="lcard-sub">Ingresa con cualquier correo y contraseña</div>
+      <div class="lf"><label>Correo electrónico</label><input type="email" id="linp-email" placeholder="tu@email.com"/></div>
+      <div class="lf"><label>Contraseña</label><input type="password" id="linp-pass" placeholder="••••••••"/></div>
+      <div class="l-hint">Demo libre: ingresa con cualquier correo y contraseña o selecciona un rol abajo.</div>
+      <button class="l-btn" onclick="doLogin('CEO')">Ingresar al sistema</button>
+      <div class="l-roles-t">Acceso rápido por rol:</div>
+      <div class="l-roles">
+        <div class="l-role" onclick="doLogin('CEO')"><div class="l-role-n">CEO</div><div class="l-role-d">Vista gerencial</div></div>
+        <div class="l-role" onclick="doLogin('Financiero')"><div class="l-role-n">Dir. Financiero</div><div class="l-role-d">Finanzas y obra</div></div>
+        <div class="l-role" onclick="doLogin('Obra')"><div class="l-role-n">Dir. de Obra</div><div class="l-role-d">Construcción</div></div>
+        <div class="l-role" onclick="doLogin('Comercial')"><div class="l-role-n">Eq. Comercial</div><div class="l-role-d">CRM y ocupancia</div></div>
+        <div class="l-role" onclick="doLogin('Cobranza')"><div class="l-role-n">Cobranza</div><div class="l-role-d">Cartera y mora</div></div>
+        <div class="l-role" onclick="doLogin('Interventor')"><div class="l-role-n">Interventor</div><div class="l-role-d">Auditoría obra</div></div>
+        <div class="l-role" onclick="doLogin('Inversionista')"><div class="l-role-n">Inversionista</div><div class="l-role-d">Mi inversión</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- APP -->
+<div id="app-screen" style="display:none">
+<div class="shell">
+  <div class="sb">
+    <div class="sb-brand">
+      <div class="sb-bars"><div class="sb-bar" style="width:4px;height:11px"></div><div class="sb-bar" style="width:4px;height:17px"></div><div class="sb-bar" style="width:4px;height:8px"></div></div>
+      <div class="sb-name">ESTRUCTURAR FUTURO</div>
+      <div class="sb-tag">PropTrack360 · Infibots</div>
+    </div>
+    <div class="sb-nav" id="sb-nav"></div>
+    <div class="sb-foot">
+      <div class="sb-user">
+        <div class="sb-av" id="sb-av">CE</div>
+        <div><div class="sb-un" id="sb-un">CEO</div><div class="sb-ur" id="sb-ur">Administrador</div></div>
+      </div>
+      <div class="sb-out" onclick="doLogout()">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.35)" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+        <span>Cerrar sesión</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="main">
+    <div class="topbar">
+      <div class="ham-btn" onclick="toggleDrawer(true)">☰</div>
+      <div><div class="tb-title" id="tb-title">Dashboard</div><div class="tb-sub" id="tb-sub"></div></div>
+      <button class="tb-icon-btn" onclick="shareURL()" title="Copiar enlace"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg></button>
+      <button class="tb-icon-btn" id="dark-btn" onclick="toggleDark()" title="Modo oscuro"><svg id="dark-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg></button>
+      <div class="tb-notif"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg><div class="n-pip"></div></div>
+    </div>
+    <div class="pc">
+
+<!-- ======== PAGE: CEO DASHBOARD ======== -->
+<div class="page on" id="page-ceo-dashboard">
+<div class="krow k4 au">
+  <div class="kpi"><div class="ki" style="background:var(--or-bg)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--or)" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg></div><div class="kl">Ocupancia</div><div class="kv" style="color:var(--or)">84%</div><div class="kd" style="color:var(--gn)">▲ 3% este mes</div></div>
+  <div class="kpi"><div class="ki" style="background:var(--rd-bg)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--rd)" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg></div><div class="kl">Mora activa</div><div class="kv" style="color:var(--rd)">$142M</div><div class="kd" style="color:var(--rd)">11 arrendatarios</div></div>
+  <div class="kpi"><div class="ki" style="background:var(--nv-bg)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--nv)" stroke-width="2"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/></svg></div><div class="kl">Avance obras</div><div class="kv" style="color:var(--nv)">67%</div><div class="kd" style="color:var(--tx3)">2 proyectos</div></div>
+  <div class="kpi"><div class="ki" style="background:var(--gn-bg)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--gn)" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/></svg></div><div class="kl">Ingresos/mes</div><div class="kv" style="color:var(--gn)">$824M</div><div class="kd" style="color:var(--gn)">▲ 5% vs ant.</div></div>
+</div>
+
+<div class="r2 au2">
+  <div class="card">
+    <div class="ch"><span class="ct">Ocupancia por centro</span><span class="badge bor">3 centros</span></div>
+    <div class="chart-wrap"><canvas id="chartOcupancia"></canvas></div>
+  </div>
+  <div class="card">
+    <div class="ch"><span class="ct">Ingresos mensuales</span><span class="badge bgn">Últimos 6 meses</span></div>
+    <div class="chart-wrap"><canvas id="chartIngresos"></canvas></div>
+  </div>
+</div>
+
+<div class="r2 au3">
+  <div class="card">
+    <div class="ch"><span class="ct">Pipeline comercial</span><span class="badge bnv">Prospectos activos</span></div>
+    <div class="pipeline">
+      <div class="pip-stage"><div class="pip-box" style="background:var(--nv-bg)" onclick="goTo('comercial-crm')"><div class="pip-n" style="color:var(--nv)">24</div><div class="pip-l" style="color:var(--nv)">Prospectos</div><div class="pip-val" style="color:var(--nv)">nuevos</div></div></div>
+      <div class="pip-stage"><div class="pip-box" style="background:var(--am-bg)" onclick="goTo('comercial-crm')"><div class="pip-n" style="color:var(--am)">14</div><div class="pip-l" style="color:var(--am)">En visita</div><div class="pip-val" style="color:var(--am)">$48M pot.</div></div></div>
+      <div class="pip-stage"><div class="pip-box" style="background:var(--or-bg)" onclick="goTo('comercial-crm')"><div class="pip-n" style="color:var(--or)">7</div><div class="pip-l" style="color:var(--or)">Negociando</div><div class="pip-val" style="color:var(--or)">$29M pot.</div></div></div>
+      <div class="pip-stage"><div class="pip-box" style="background:var(--gn-bg)" onclick="goTo('comercial-crm')"><div class="pip-n" style="color:var(--gn)">3</div><div class="pip-l" style="color:var(--gn)">Cierre</div><div class="pip-val" style="color:var(--gn)">$12M pot.</div></div></div>
+    </div>
+    <div class="chart-wrap-sm"><canvas id="chartPipeline"></canvas></div>
+  </div>
+  <div class="card">
+    <div class="ch"><span class="ct">Estado de obras</span><span class="badge bnv">Avance real vs plan</span></div>
+    <div class="chart-wrap"><canvas id="chartObras"></canvas></div>
+  </div>
+</div>
+
+<div class="r2 au4">
+  <div class="card">
+    <div class="ch"><span class="ct">Cartera por estado</span><span class="badge brd">$142M mora</span></div>
+    <div class="chart-wrap"><canvas id="chartCartera"></canvas></div>
+  </div>
+  <div class="card">
+    <div class="ch"><span class="ct">Alertas críticas</span><span class="badge brd">5 hoy</span></div>
+    <div class="ai"><div class="adot drd"></div><div><div class="at">Mora +90 días: Moda Express — <strong>$18.4M</strong></div><div class="ati">Centro Norte · Local 23B · hace 2 días</div></div></div>
+    <div class="ai"><div class="adot drd"></div><div><div class="at">Contrato vence en 15 días — Local 7A Plaza Mayor</div><div class="ati">hoy</div></div></div>
+    <div class="ai"><div class="adot dam"></div><div><div class="at">Interventoría sin reporte — Torre Norte (8 días)</div><div class="ati">hace 8 días</div></div></div>
+    <div class="ai"><div class="adot dam"></div><div><div class="at">3 pagos duplicados detectados — Paseo del Valle</div><div class="ati">hace 1 día</div></div></div>
+    <div class="ai"><div class="adot dnv"></div><div><div class="at">Inversionista C solicita reporte de rentabilidad</div><div class="ati">hoy</div></div></div>
+  </div>
+</div>
+</div>
+
+<!-- ======== PAGE: CEO OCUPANCIA (vista) ======== -->
+<div class="page" id="page-ceo-ocupancia">
+<div class="krow k4 au">
+  <div class="kpi"><div class="kl">Total locales</div><div class="kv">212</div><div class="kd" style="color:var(--tx3)">3 centros</div></div>
+  <div class="kpi"><div class="kl">Ocupados</div><div class="kv" style="color:var(--gn)">182</div><div class="kd" style="color:var(--gn)">86% ocupancia</div></div>
+  <div class="kpi"><div class="kl">Vacantes</div><div class="kv" style="color:var(--rd)">18</div><div class="kd" style="color:var(--rd)">Oportunidad $58M/mes</div></div>
+  <div class="kpi"><div class="kl">Precio prom. m²</div><div class="kv">$82K</div><div class="kd" style="color:var(--gn)">▲ 4% vs año ant.</div></div>
+</div>
+<div class="r2 au2">
+  <div class="card">
+    <div class="ch"><span class="ct">Ocupancia por centro</span></div>
+    <div class="bar-row"><div class="bt"><span class="bn2">Plaza Mayor</span><span class="bp" style="color:var(--or)">91%</span></div><div class="btr"><div class="bf for" style="--w:91%;width:91%"></div></div><div class="bch"><span class="bc">82/90 · $380M/mes</span></div></div>
+    <div style="height:10px"></div>
+    <div class="bar-row"><div class="bt"><span class="bn2">Centro Norte</span><span class="bp" style="color:#C47C00">78%</span></div><div class="btr"><div class="bf fam" style="--w:78%;width:78%"></div></div><div class="bch"><span class="bc">56/72 · $248M/mes</span></div></div>
+    <div style="height:10px"></div>
+    <div class="bar-row"><div class="bt"><span class="bn2">Paseo del Valle</span><span class="bp" style="color:var(--or)">88%</span></div><div class="btr"><div class="bf for" style="--w:88%;width:88%"></div></div><div class="bch"><span class="bc">44/50 · $196M/mes</span></div></div>
+  </div>
+  <div class="card">
+    <div class="ch"><span class="ct">Tendencia ocupancia</span><span class="badge bor">12 meses</span></div>
+    <div class="chart-wrap"><canvas id="chartOcuTend"></canvas></div>
+  </div>
+</div>
+<div class="fc au3">
+  <div class="ch"><span class="ct">Locales vacantes — oportunidad comercial</span><span class="badge bam">18 disponibles</span></div>
+  <table class="tbl"><thead><tr><th>Local</th><th>Centro</th><th>Área m²</th><th>Precio/mes</th><th>Días vacante</th><th>Estado</th></tr></thead><tbody>
+    <tr><td>Local 14A</td><td>Plaza Mayor</td><td>42</td><td style="font-family:'DM Mono',monospace">$3.570K</td><td><span class="tag tgn">12 días</span></td><td><span class="tag tor">En prospección</span></td></tr>
+    <tr><td>Local 31C</td><td>Centro Norte</td><td>68</td><td style="font-family:'DM Mono',monospace">$4.896K</td><td><span class="tag tam">45 días</span></td><td><span class="tag tam">Sin prospecto</span></td></tr>
+    <tr><td>Local 8B</td><td>Centro Norte</td><td>120</td><td style="font-family:'DM Mono',monospace">$8.640K</td><td><span class="tag trd">90 días</span></td><td><span class="tag trd">Urgente</span></td></tr>
+    <tr><td>Local 2A</td><td>Paseo del Valle</td><td>35</td><td style="font-family:'DM Mono',monospace">$3.150K</td><td><span class="tag tgn">8 días</span></td><td><span class="tag tor">En prospección</span></td></tr>
+  </tbody></table>
+</div>
+</div>
+
+<!-- ======== PAGE: CEO PROYECCIONES ======== -->
+<div class="page" id="page-ceo-proyecciones">
+<div class="krow k3 au">
+  <div class="kpi"><div class="kl">Ingreso actual/mes</div><div class="kv">$824M</div><div class="kd" style="color:var(--tx3)">84% ocup. · 3 centros</div></div>
+  <div class="kpi"><div class="kl">Proyección 95% ocup.</div><div class="kv" style="color:var(--gn)">$933M</div><div class="kd" style="color:var(--gn)">+$109M/mes</div></div>
+  <div class="kpi"><div class="kl">ROI portafolio</div><div class="kv" style="color:var(--or)">17.3%</div><div class="kd" style="color:var(--gn)">▲ 1.2pts</div></div>
+</div>
+<div class="r2 au2">
+  <div class="card">
+    <div class="ch"><span class="ct">Proyección de ingresos 2025–2026</span></div>
+    <div class="chart-wrap-lg"><canvas id="chartProyIngresos"></canvas></div>
+  </div>
+  <div class="card">
+    <div class="ch"><span class="ct">ROI por inversionista</span></div>
+    <div class="chart-wrap-lg"><canvas id="chartROI"></canvas></div>
+  </div>
+</div>
+<div class="r2 au3">
+  <div class="card">
+    <div class="ch"><span class="ct">Entrega Torre Norte</span><span class="badge bor">Mar 2026</span></div>
+    <div class="stat-row"><span class="sl">Nuevos locales</span><span class="sv">48</span></div>
+    <div class="stat-row"><span class="sl">Ingreso adicional est.</span><span class="sv" style="color:var(--or)">$204M/mes</span></div>
+    <div class="stat-row"><span class="sl">ROI inversionistas est.</span><span class="sv" style="color:var(--or)">18.4%</span></div>
+    <div class="stat-row"><span class="sl">Abono a inversionistas</span><span class="sv">$1.200M</span></div>
+  </div>
+  <div class="card">
+    <div class="ch"><span class="ct">Entrega Paseo del Valle</span><span class="badge bnv">Sep 2026</span></div>
+    <div class="stat-row"><span class="sl">Nuevos locales</span><span class="sv">32</span></div>
+    <div class="stat-row"><span class="sl">Ingreso adicional est.</span><span class="sv" style="color:var(--nv)">$144M/mes</span></div>
+    <div class="stat-row"><span class="sl">ROI inversionistas est.</span><span class="sv" style="color:var(--nv)">16.2%</span></div>
+    <div class="stat-row"><span class="sl">Abono a inversionistas</span><span class="sv">$780M</span></div>
+  </div>
+</div>
+</div>
+
+<!-- ======== PAGE: FINANCIERO DASHBOARD ======== -->
+<div class="page" id="page-fin-dashboard">
+<div class="krow k4 au">
+  <div class="kpi"><div class="kl">Total cartera</div><div class="kv">$824M</div><div class="kd" style="color:var(--tx3)">212 arrend.</div></div>
+  <div class="kpi"><div class="kl">En mora</div><div class="kv" style="color:var(--rd)">$142M</div><div class="kd" style="color:var(--rd)">17.2% · 11 arrend.</div></div>
+  <div class="kpi"><div class="kl">Al día</div><div class="kv" style="color:var(--gn)">$682M</div><div class="kd" style="color:var(--gn)">201 arrendatarios</div></div>
+  <div class="kpi"><div class="kl">Recuperado este mes</div><div class="kv" style="color:var(--or)">$28M</div><div class="kd" style="color:var(--gn)">▲ 12% vs ant.</div></div>
+</div>
+<div class="r2 au2">
+  <div class="card">
+    <div class="ch"><span class="ct">Distribución de cartera</span></div>
+    <div class="chart-wrap"><canvas id="chartFinCartera"></canvas></div>
+  </div>
+  <div class="card">
+    <div class="ch"><span class="ct">Recaudo mensual</span><span class="badge bgn">Últimos 6 meses</span></div>
+    <div class="chart-wrap"><canvas id="chartFinRecaudo"></canvas></div>
+  </div>
+</div>
+<div class="r2 au3">
+  <div class="card">
+    <div class="ch"><span class="ct">Mora por centro</span></div>
+    <div class="chart-wrap"><canvas id="chartFinMora"></canvas></div>
+  </div>
+  <div class="card">
+    <div class="ch"><span class="ct">Mora destacada</span><span class="badge brd">11 activas</span></div>
+    <table class="tbl"><thead><tr><th>Arrendatario</th><th>Días</th><th>Saldo</th><th>Estado</th></tr></thead><tbody>
+      <tr><td>Moda Express S.A.</td><td>94</td><td style="font-family:'DM Mono',monospace">$18.4M</td><td><span class="tag trd">Crítico</span></td></tr>
+      <tr><td>TechStore Colombia</td><td>62</td><td style="font-family:'DM Mono',monospace">$9.1M</td><td><span class="tag trd">Crítico</span></td></tr>
+      <tr><td>Café Delicias</td><td>58</td><td style="font-family:'DM Mono',monospace">$6.2M</td><td><span class="tag tam">Seguimiento</span></td></tr>
+      <tr><td>Librería Central</td><td>45</td><td style="font-family:'DM Mono',monospace">$4.5M</td><td><span class="tag tam">Seguimiento</span></td></tr>
+    </tbody></table>
+  </div>
+</div>
+</div>
+
+<!-- ======== PAGE: FINANCIERO OBRA ======== -->
+<div class="page" id="page-fin-obra">
+<div class="krow k4 au">
+  <div class="kpi"><div class="kl">Presupuesto total</div><div class="kv">$6.940M</div><div class="kd" style="color:var(--tx3)">2 proyectos</div></div>
+  <div class="kpi"><div class="kl">Ejecutado</div><div class="kv" style="color:var(--or)">$4.130M</div><div class="kd" style="color:var(--or)">59.5% del total</div></div>
+  <div class="kpi"><div class="kl">Saldo disponible</div><div class="kv" style="color:var(--gn)">$2.810M</div><div class="kd" style="color:var(--tx3)">Para ejecutar</div></div>
+  <div class="kpi"><div class="kl">Próximo desembolso</div><div class="kv" style="color:var(--nv)">$480M</div><div class="kd" style="color:var(--nv)">Abr 2026 · Torre N.</div></div>
+</div>
+<div class="r2 au2">
+  <div class="card">
+    <div class="ch"><span class="ct">Ejecución presupuestal</span></div>
+    <div class="chart-wrap-lg"><canvas id="chartFinObraEjec"></canvas></div>
+  </div>
+  <div class="card">
+    <div class="ch"><span class="ct">Flujo de inversión por mes</span></div>
+    <div class="chart-wrap-lg"><canvas id="chartFinObraFlujo"></canvas></div>
+  </div>
+</div>
+<div class="fc au3">
+  <div class="ch"><span class="ct">Detalle financiero por proyecto</span></div>
+  <table class="tbl"><thead><tr><th>Proyecto</th><th>Presupuesto</th><th>Ejecutado</th><th>% Ejec.</th><th>Saldo</th><th>Variación</th></tr></thead><tbody>
+    <tr><td><strong>Torre Norte — F2</strong></td><td style="font-family:'DM Mono',monospace">$3.940M</td><td style="font-family:'DM Mono',monospace">$2.840M</td><td><span class="tag tor">72%</span></td><td style="font-family:'DM Mono',monospace">$1.100M</td><td><span class="tag tgn">+$40K</span></td></tr>
+    <tr><td><strong>Expansión Paseo</strong></td><td style="font-family:'DM Mono',monospace">$3.000M</td><td style="font-family:'DM Mono',monospace">$1.290M</td><td><span class="tag tnv">43%</span></td><td style="font-family:'DM Mono',monospace">$1.710M</td><td><span class="tag trd">-$120K</span></td></tr>
+  </tbody></table>
+</div>
+</div>
+
+<!-- ======== PAGE: OBRA ======== -->
+<div class="page" id="page-obra-main">
+<div class="krow k4 au">
+  <div class="kpi"><div class="kl">Avance general</div><div class="kv" style="color:var(--or)">67%</div><div class="kd" style="color:var(--tx3)">Ponderado 2 obras</div></div>
+  <div class="kpi"><div class="kl">Días restantes T.Norte</div><div class="kv" style="color:var(--nv)">83</div><div class="kd" style="color:var(--nv)">Entrega Mar 2026</div></div>
+  <div class="kpi"><div class="kl">Días restantes Paseo</div><div class="kv" style="color:var(--am)">265</div><div class="kd" style="color:var(--am)">Entrega Sep 2026</div></div>
+  <div class="kpi"><div class="kl">Reportes pendientes</div><div class="kv" style="color:var(--rd)">1</div><div class="kd" style="color:var(--rd)">Torre Norte · 8 días</div></div>
+</div>
+
+<div class="fc au2">
+  <div class="ch"><span class="ct">Gantt — Compromiso vs Ejecución real</span><span class="badge bnv">Semanas</span></div>
+  <div class="gantt">
+    <div class="gtt-row"><span class="gtt-label">Cimentación</span><div class="gtt-track"><div class="gtt-plan for" style="left:0;width:100%"></div><div class="gtt-actual fgn" style="left:0;width:100%"><span class="gtt-pct">100%</span></div></div></div>
+    <div class="gtt-row"><span class="gtt-label">Estructura</span><div class="gtt-track"><div class="gtt-plan for" style="left:0;width:100%"></div><div class="gtt-actual fgn" style="left:0;width:100%"><span class="gtt-pct">100%</span></div></div></div>
+    <div class="gtt-row"><span class="gtt-label">Fachada</span><div class="gtt-track"><div class="gtt-plan for" style="left:0;width:90%"></div><div class="gtt-actual for" style="left:0;width:85%"><span class="gtt-pct">85%</span></div></div></div>
+    <div class="gtt-row"><span class="gtt-label">Acabados interiores</span><div class="gtt-track"><div class="gtt-plan for" style="left:0;width:60%"></div><div class="gtt-actual fam" style="left:0;width:40%"><span class="gtt-pct">40%</span></div></div></div>
+    <div class="gtt-row"><span class="gtt-label">Instalaciones</span><div class="gtt-track"><div class="gtt-plan for" style="left:0;width:35%"></div><div class="gtt-actual fam" style="left:0;width:20%"><span class="gtt-pct">20%</span></div></div></div>
+    <div class="gtt-row"><span class="gtt-label">Acabados exteriores</span><div class="gtt-track"><div class="gtt-plan for" style="left:0;width:15%"></div><div class="gtt-actual frd" style="left:0;width:5%"><span class="gtt-pct">5%</span></div></div></div>
+  </div>
+  <div class="gtt-legend">
+    <div class="gtt-leg-item"><div class="gtt-leg-dot" style="background:var(--or);opacity:.35"></div>Compromiso planificado</div>
+    <div class="gtt-leg-item"><div class="gtt-leg-dot" style="background:var(--gn)"></div>Completado</div>
+    <div class="gtt-leg-item"><div class="gtt-leg-dot" style="background:var(--or)"></div>En curso (ok)</div>
+    <div class="gtt-leg-item"><div class="gtt-leg-dot" style="background:#C47C00"></div>En curso (retraso leve)</div>
+    <div class="gtt-leg-item"><div class="gtt-leg-dot" style="background:var(--rd)"></div>Retraso crítico</div>
+  </div>
+</div>
+
+<div class="r2 au3">
+  <div class="card">
+    <div class="ch"><span class="ct">Torre Norte — Fase 2</span><span class="badge bor">72% avance</span></div>
+    <div class="btr" style="height:14px;margin-bottom:6px"><div class="bf for" style="--w:72%;width:72%"></div></div>
+    <div class="obra-steps">
+      <div class="os done"><div class="osd"></div><div class="osl">Ciment.</div></div>
+      <div class="os done"><div class="osd"></div><div class="osl">Estructura</div></div>
+      <div class="os active"><div class="osd"></div><div class="osl">Fachada</div></div>
+      <div class="os"><div class="osd"></div><div class="osl">Acabados</div></div>
+      <div class="os"><div class="osd"></div><div class="osl">Instal.</div></div>
+    </div>
+    <table class="tbl" style="margin-top:10px"><thead><tr><th>Etapa</th><th>Plan</th><th>Real</th><th>Var. días</th><th>Estado</th></tr></thead><tbody>
+      <tr><td>Cimentación</td><td>Sem 1–4</td><td>Sem 1–4</td><td><span class="tag tgn">0</span></td><td><span class="tag tgn">Completo</span></td></tr>
+      <tr><td>Estructura</td><td>Sem 5–10</td><td>Sem 5–10</td><td><span class="tag tgn">0</span></td><td><span class="tag tgn">Completo</span></td></tr>
+      <tr><td>Fachada</td><td>Sem 11–16</td><td>Sem 11–17</td><td><span class="tag tam">+7 días</span></td><td><span class="tag tor">En curso</span></td></tr>
+      <tr><td>Acabados int.</td><td>Sem 14–20</td><td>Sem 15–?</td><td><span class="tag tam">+7 días</span></td><td><span class="tag tam">En proceso</span></td></tr>
+      <tr><td>Instalaciones</td><td>Sem 17–22</td><td>Sem 18–?</td><td><span class="tag trd">+14 días</span></td><td><span class="tag tam">Iniciando</span></td></tr>
+    </tbody></table>
+    <div style="margin-top:11px;padding-top:10px;border-top:1.5px solid var(--bd)">
+      <div class="stat-row"><span class="sl">Presupuesto</span><span class="sv">$3.940M</span></div>
+      <div class="stat-row"><span class="sl">Ejecutado</span><span class="sv" style="color:var(--or)">$2.840M (72%)</span></div>
+      <div class="stat-row"><span class="sl">Entrega comprometida</span><span class="sv">15 Mar 2026</span></div>
+      <div class="stat-row"><span class="sl">Proyección actualizada</span><span class="sv" style="color:var(--am)">29 Mar 2026 (+14d)</span></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="ch"><span class="ct">Expansión Paseo del Valle</span><span class="badge bnv">43% avance</span></div>
+    <div class="btr" style="height:14px;margin-bottom:6px"><div class="bf fnv" style="--w:43%;width:43%"></div></div>
+    <div class="obra-steps">
+      <div class="os done"><div class="osd"></div><div class="osl">Permisos</div></div>
+      <div class="os done"><div class="osd"></div><div class="osl">Ciment.</div></div>
+      <div class="os active"><div class="osd"></div><div class="osl">Estructura</div></div>
+      <div class="os"><div class="osd"></div><div class="osl">Fachada</div></div>
+      <div class="os"><div class="osd"></div><div class="osl">Acabados</div></div>
+    </div>
+    <table class="tbl" style="margin-top:10px"><thead><tr><th>Etapa</th><th>Plan</th><th>Real</th><th>Var. días</th><th>Estado</th></tr></thead><tbody>
+      <tr><td>Permisos</td><td>Sem 1–3</td><td>Sem 1–3</td><td><span class="tag tgn">0</span></td><td><span class="tag tgn">Completo</span></td></tr>
+      <tr><td>Cimentación</td><td>Sem 4–8</td><td>Sem 4–8</td><td><span class="tag tgn">0</span></td><td><span class="tag tgn">Completo</span></td></tr>
+      <tr><td>Estructura</td><td>Sem 9–16</td><td>Sem 9–?</td><td><span class="tag tgn">0</span></td><td><span class="tag tor">En curso</span></td></tr>
+      <tr><td>Fachada</td><td>Sem 14–20</td><td>—</td><td><span class="tag ttx">—</span></td><td><span class="tag ttx">Pendiente</span></td></tr>
+      <tr><td>Acabados</td><td>Sem 18–28</td><td>—</td><td><span class="tag ttx">—</span></td><td><span class="tag ttx">Pendiente</span></td></tr>
+    </tbody></table>
+    <div style="margin-top:11px;padding-top:10px;border-top:1.5px solid var(--bd)">
+      <div class="stat-row"><span class="sl">Presupuesto</span><span class="sv">$3.000M</span></div>
+      <div class="stat-row"><span class="sl">Ejecutado</span><span class="sv" style="color:var(--nv)">$1.290M (43%)</span></div>
+      <div class="stat-row"><span class="sl">Entrega comprometida</span><span class="sv">15 Sep 2026</span></div>
+      <div class="stat-row"><span class="sl">Proyección actual</span><span class="sv" style="color:var(--gn)">En tiempo</span></div>
+    </div>
+  </div>
+</div>
+
+<div class="fc au4">
+  <div class="ch"><span class="ct">Cargar reporte de interventoría</span></div>
+  <div class="fgrid">
+    <div class="fg"><label class="flabel">Obra</label><select class="fsel"><option>Torre Norte — Fase 2</option><option>Expansión Paseo del Valle</option></select></div>
+    <div class="fg"><label class="flabel">Semana</label><input class="finput" type="week"/></div>
+    <div class="fg"><label class="flabel">% avance reportado</label><input class="finput" type="number" min="0" max="100" placeholder="0–100"/></div>
+    <div class="fg"><label class="flabel">Responsable</label><input class="finput" type="text" placeholder="Nombre interventor"/></div>
+    <div class="fg full"><label class="flabel">Descripción del avance</label><textarea class="fta" placeholder="Actividades realizadas, materiales, personal..."></textarea></div>
+    <div class="fg full"><label class="flabel">Observaciones e imprevistos</label><textarea class="fta" placeholder="Retrasos, cambios de cronograma..."></textarea></div>
+  </div>
+  <div class="faction">
+    <button class="btn btp" onclick="showToast('Reporte enviado correctamente','success')">Enviar reporte</button>
+    <button class="btn bts">Guardar borrador</button>
+    <button class="btn bts" onclick="document.getElementById('f-obra-report').click()">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+      Subir fotos / soportes
+    </button>
+    <input type="file" id="f-obra-report" multiple accept=".jpg,.jpeg,.png,.pdf" onchange="handleFile(this,'obra-report')"/>
+  </div>
+  <div class="fl" id="files-obra-report"></div>
+</div>
+</div>
+
+<!-- ======== PAGE: COMERCIAL CRM ======== -->
+<div class="page" id="page-comercial-crm">
+<div class="krow k4 au">
+  <div class="kpi"><div class="kl">Prospectos activos</div><div class="kv" style="color:var(--nv)">48</div><div class="kd" style="color:var(--tx3)">Total pipeline</div></div>
+  <div class="kpi"><div class="kl">Visitas esta semana</div><div class="kv" style="color:var(--or)">12</div><div class="kd" style="color:var(--gn)">▲ 3 vs sem. ant.</div></div>
+  <div class="kpi"><div class="kl">Cierres este mes</div><div class="kv" style="color:var(--gn)">3</div><div class="kd" style="color:var(--gn)">$12M canon/mes</div></div>
+  <div class="kpi"><div class="kl">Potencial en pipeline</div><div class="kv" style="color:var(--am)">$89M</div><div class="kd" style="color:var(--tx3)">Canon mensual pot.</div></div>
+</div>
+
+<div class="fc au2">
+  <div class="ch"><span class="ct">Pipeline de prospectos</span><span class="badge bnv">Kanban</span></div>
+  <div class="kanban">
+    <div class="kb-col">
+      <div class="kb-col-hd"><span class="kb-col-t">Nuevo prospecto</span><div class="kb-count" style="background:var(--nv-bg);color:var(--nv)">24</div></div>
+      <div class="kb-card" onclick="openModal('modal-lead')"><div class="kb-card-t">Zara Colombia</div><div class="kb-card-s">Centro Norte · 120m²</div><div class="kb-card-ft"><span class="tag tnv" style="font-size:10px">Nuevo</span><div class="kb-av" style="background:var(--nv)">MR</div></div></div>
+      <div class="kb-card" onclick="openModal('modal-lead')"><div class="kb-card-t">Starbucks EF</div><div class="kb-card-s">Plaza Mayor · 85m²</div><div class="kb-card-ft"><span class="tag tnv" style="font-size:10px">Nuevo</span><div class="kb-av" style="background:var(--or)">AL</div></div></div>
+      <div class="kb-card" onclick="openModal('modal-lead')"><div class="kb-card-t">Farmacia Cruz V.</div><div class="kb-card-s">Paseo Valle · 60m²</div><div class="kb-card-ft"><span class="tag tnv" style="font-size:10px">Nuevo</span><div class="kb-av" style="background:var(--nv)">MR</div></div></div>
+      <button class="btn bts btn-sm" style="width:100%;margin-top:8px;justify-content:center" onclick="openModal('modal-lead')">+ Nuevo prospecto</button>
+    </div>
+    <div class="kb-col">
+      <div class="kb-col-hd"><span class="kb-col-t">En visita</span><div class="kb-count" style="background:var(--am-bg);color:var(--am)">14</div></div>
+      <div class="kb-card" onclick="openModal('modal-lead')"><div class="kb-card-t">Nike Store</div><div class="kb-card-s">Centro Norte · 150m² · $12.7M</div><div class="kb-card-ft"><span class="tag tam" style="font-size:10px">Visita hoy</span><div class="kb-av" style="background:var(--am)">JP</div></div></div>
+      <div class="kb-card" onclick="openModal('modal-lead')"><div class="kb-card-t">Bancolombia Ext.</div><div class="kb-card-s">Plaza Mayor · 45m² · $3.8M</div><div class="kb-card-ft"><span class="tag tam" style="font-size:10px">Visita mar.</span><div class="kb-av" style="background:var(--or)">AL</div></div></div>
+      <div class="kb-card" onclick="openModal('modal-lead')"><div class="kb-card-t">Óptica Colombiana</div><div class="kb-card-s">Paseo Valle · 55m² · $4.9M</div><div class="kb-card-ft"><span class="tag tor" style="font-size:10px">2da visita</span><div class="kb-av" style="background:var(--nv)">MR</div></div></div>
+    </div>
+    <div class="kb-col">
+      <div class="kb-col-hd"><span class="kb-col-t">Negociando</span><div class="kb-count" style="background:var(--or-bg);color:var(--or)">7</div></div>
+      <div class="kb-card" onclick="openModal('modal-lead')"><div class="kb-card-t">Adidas Outlet</div><div class="kb-card-s">Centro Norte · 200m² · $17M</div><div class="kb-card-ft"><span class="tag tor" style="font-size:10px">Propuesta enviada</span><div class="kb-av" style="background:var(--am)">JP</div></div></div>
+      <div class="kb-card" onclick="openModal('modal-lead')"><div class="kb-card-t">Restaurante Masa</div><div class="kb-card-s">Plaza Mayor · 90m² · $7.6M</div><div class="kb-card-ft"><span class="tag tor" style="font-size:10px">Revisando</span><div class="kb-av" style="background:var(--nv)">MR</div></div></div>
+    </div>
+    <div class="kb-col">
+      <div class="kb-col-hd"><span class="kb-col-t">Cierre / Contrato</span><div class="kb-count" style="background:var(--gn-bg);color:var(--gn)">3</div></div>
+      <div class="kb-card" onclick="openModal('modal-lead')"><div class="kb-card-t">H&M Colombia</div><div class="kb-card-s">Plaza Mayor · 220m² · $18.7M</div><div class="kb-card-ft"><span class="tag tgn" style="font-size:10px">Firma esta semana</span><div class="kb-av" style="background:var(--or)">AL</div></div></div>
+      <div class="kb-card" onclick="openModal('modal-lead')"><div class="kb-card-t">Heladería Amor Perfecto</div><div class="kb-card-s">Paseo Valle · 30m² · $2.5M</div><div class="kb-card-ft"><span class="tag tgn" style="font-size:10px">Contrato listo</span><div class="kb-av" style="background:var(--am)">JP</div></div></div>
+    </div>
+  </div>
+</div>
+
+<div class="r2 au3">
+  <div class="card">
+    <div class="ch"><span class="ct">Gestión por agente</span></div>
+    <div class="agent-bar">
+      <div class="agent-av" style="background:var(--nv)">MR</div>
+      <span class="agent-name">María Rodríguez</span>
+      <div class="agent-stats">
+        <div class="astat"><div class="astat-v" style="color:var(--nv)">18</div><div class="astat-l">Prospectos</div></div>
+        <div class="astat"><div class="astat-v" style="color:var(--or)">6</div><div class="astat-l">Visitas</div></div>
+        <div class="astat"><div class="astat-v" style="color:var(--gn)">2</div><div class="astat-l">Cierres</div></div>
+      </div>
+    </div>
+    <div class="agent-bar">
+      <div class="agent-av" style="background:var(--or)">AL</div>
+      <span class="agent-name">Andrés López</span>
+      <div class="agent-stats">
+        <div class="astat"><div class="astat-v" style="color:var(--nv)">15</div><div class="astat-l">Prospectos</div></div>
+        <div class="astat"><div class="astat-v" style="color:var(--or)">4</div><div class="astat-l">Visitas</div></div>
+        <div class="astat"><div class="astat-v" style="color:var(--gn)">1</div><div class="astat-l">Cierres</div></div>
+      </div>
+    </div>
+    <div class="agent-bar">
+      <div class="agent-av" style="background:var(--am)">JP</div>
+      <span class="agent-name">Juliana Peña</span>
+      <div class="agent-stats">
+        <div class="astat"><div class="astat-v" style="color:var(--nv)">15</div><div class="astat-l">Prospectos</div></div>
+        <div class="astat"><div class="astat-v" style="color:var(--or)">5</div><div class="astat-l">Visitas</div></div>
+        <div class="astat"><div class="astat-v" style="color:var(--gn)">0</div><div class="astat-l">Cierres</div></div>
+      </div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="ch"><span class="ct">Conversión del pipeline</span></div>
+    <div class="chart-wrap"><canvas id="chartCrm"></canvas></div>
+  </div>
+</div>
+</div>
+
+<!-- ======== PAGE: COMERCIAL OCUPANCIA ======== -->
+<div class="page" id="page-comercial-ocupancia">
+<div class="note note-am"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>Vista Equipo Comercial — locales disponibles y gestión de arrendamiento.</div>
+<div class="krow k4 au">
+  <div class="kpi"><div class="kl">Locales vacantes</div><div class="kv" style="color:var(--rd)">18</div><div class="kd" style="color:var(--rd)">Disponibles hoy</div></div>
+  <div class="kpi"><div class="kl">Oportunidad/mes</div><div class="kv" style="color:var(--or)">$58M</div><div class="kd" style="color:var(--tx3)">Canon potencial</div></div>
+  <div class="kpi"><div class="kl">En negociación</div><div class="kv" style="color:var(--am)">7</div><div class="kd" style="color:var(--am)">Prospectos activos</div></div>
+  <div class="kpi"><div class="kl">Cierres esperados</div><div class="kv" style="color:var(--gn)">3</div><div class="kd" style="color:var(--gn)">Esta semana</div></div>
+</div>
+<div class="fc au2">
+  <div class="ch"><span class="ct">Locales disponibles para arrendar</span><button class="btn btp btn-sm" onclick="openModal('modal-local')">+ Registrar interesado</button></div>
+  <table class="tbl"><thead><tr><th>Local</th><th>Centro</th><th>Área m²</th><th>Canon/mes</th><th>Días vacante</th><th>Prospecto asignado</th><th>Acción</th></tr></thead><tbody>
+    <tr><td><strong>Local 14A</strong></td><td>Plaza Mayor</td><td>42</td><td style="font-family:'DM Mono',monospace">$3.570K</td><td><span class="tag tgn">12 días</span></td><td>Zara Colombia</td><td><button class="btn bts btn-sm" onclick="showToast('Ficha abierta: Local 14A','success')">Ver ficha</button></td></tr>
+    <tr><td><strong>Local 31C</strong></td><td>Centro Norte</td><td>68</td><td style="font-family:'DM Mono',monospace">$4.896K</td><td><span class="tag tam">45 días</span></td><td>—</td><td><button class="btn btp btn-sm" onclick="openModal('modal-local')">Asignar</button></td></tr>
+    <tr><td><strong>Local 8B</strong></td><td>Centro Norte</td><td>120</td><td style="font-family:'DM Mono',monospace">$8.640K</td><td><span class="tag trd">90 días</span></td><td>Nike Store</td><td><button class="btn bts btn-sm" onclick="showToast('Ficha abierta: Local 8B','success')">Ver ficha</button></td></tr>
+    <tr><td><strong>Local 2A</strong></td><td>Paseo del Valle</td><td>35</td><td style="font-family:'DM Mono',monospace">$3.150K</td><td><span class="tag tgn">8 días</span></td><td>Óptica Colombiana</td><td><button class="btn bts btn-sm" onclick="showToast('Ficha abierta: Local 2A','success')">Ver ficha</button></td></tr>
+  </tbody></table>
+</div>
+</div>
+
+<!-- ======== PAGE: COBRANZA ======== -->
+<div class="page" id="page-cobranza">
+<div class="krow k4 au">
+  <div class="kpi"><div class="kl">Total mora</div><div class="kv" style="color:var(--rd)">$142M</div><div class="kd" style="color:var(--rd)">11 cuentas</div></div>
+  <div class="kpi"><div class="kl">Mora +90 días</div><div class="kv" style="color:var(--rd)">$27.5M</div><div class="kd" style="color:var(--rd)">2 cuentas · Pre-jurídico</div></div>
+  <div class="kpi"><div class="kl">Recuperado mes</div><div class="kv" style="color:var(--gn)">$28M</div><div class="kd" style="color:var(--gn)">▲ 12% vs ant.</div></div>
+  <div class="kpi"><div class="kl">Visitas programadas</div><div class="kv" style="color:var(--nv)">4</div><div class="kd" style="color:var(--nv)">Esta semana</div></div>
+</div>
+
+<div class="fc au2">
+  <div class="ch"><span class="ct">Mora por etapa de gestión</span></div>
+  <div class="mora-pipe">
+    <div class="mp-box" style="background:var(--nv-bg)" onclick="filterMora('preventiva')"><div class="mp-n" style="color:var(--nv)">4</div><div class="mp-l" style="color:var(--nv)">Preventiva</div><div class="mp-val" style="color:var(--nv)">1–15 días</div></div>
+    <div class="mp-box" style="background:var(--am-bg)" onclick="filterMora('administrativa')"><div class="mp-n" style="color:var(--am)">3</div><div class="mp-l" style="color:var(--am)">Administrativa</div><div class="mp-val" style="color:var(--am)">16–30 días</div></div>
+    <div class="mp-box" style="background:var(--or-bg)" onclick="filterMora('extrajudicial')"><div class="mp-n" style="color:var(--or)">2</div><div class="mp-l" style="color:var(--or)">Extrajudicial</div><div class="mp-val" style="color:var(--or)">31–90 días</div></div>
+    <div class="mp-box" style="background:var(--rd-bg)" onclick="filterMora('prejuridico')"><div class="mp-n" style="color:var(--rd)">1</div><div class="mp-l" style="color:var(--rd)">Pre-jurídico</div><div class="mp-val" style="color:var(--rd)">91–180 días</div></div>
+    <div class="mp-box" style="background:#3a0000" onclick="filterMora('juridico')"><div class="mp-n" style="color:#ff8080">1</div><div class="mp-l" style="color:#ff8080">Jurídico</div><div class="mp-val" style="color:#ff8080">+180 días</div></div>
+  </div>
+</div>
+
+<div class="fc au3">
+  <div class="ch"><span class="ct">Deudores — gestión detallada</span><span id="mora-filter-badge" class="badge brd">Todos</span></div>
+  <table class="tbl" id="mora-table"><thead><tr><th>Titular</th><th>Codeudor</th><th>Local</th><th>Días mora</th><th>Saldo</th><th>Etapa</th><th>Última gestión</th><th>Acciones</th></tr></thead><tbody id="mora-tbody">
+    <tr data-etapa="prejuridico"><td><strong>Moda Express S.A.</strong></td><td>Jorge Mena</td><td>23B C.Norte</td><td><strong style="color:var(--rd)">94</strong></td><td style="font-family:'DM Mono',monospace;color:var(--rd)">$18.4M</td><td><span class="tag trd">Pre-jurídico</span></td><td>22 Mar — WhatsApp</td><td><div style="display:flex;gap:4px;flex-wrap:wrap">
+      <button class="btn bts btn-sm" onclick="sendWA('Moda Express')">📱 WhatsApp</button>
+      <button class="btn bts btn-sm" onclick="sendEmail('Moda Express')">✉️ Email</button>
+      <button class="btn btn-rd btn-sm" onclick="showToast('Enviado a Pre-jurídico','error')">⚖️ Pre-jurídico</button>
+    </div></td></tr>
+    <tr data-etapa="juridico"><td><strong>TechStore Colombia</strong></td><td>Ana Vera</td><td>12C Paseo</td><td><strong style="color:var(--rd)">182</strong></td><td style="font-family:'DM Mono',monospace;color:var(--rd)">$9.1M</td><td><span class="tag trd">Jurídico</span></td><td>18 Mar — Visita</td><td><div style="display:flex;gap:4px;flex-wrap:wrap">
+      <button class="btn bts btn-sm" onclick="sendWA('TechStore')">📱 WhatsApp</button>
+      <button class="btn btn-rd btn-sm" onclick="showToast('Caso activo en proceso jurídico','error')">⚖️ Jurídico activo</button>
+    </div></td></tr>
+    <tr data-etapa="extrajudicial"><td><strong>Café Delicias</strong></td><td>—</td><td>5A P.Mayor</td><td><strong style="color:var(--am)">58</strong></td><td style="font-family:'DM Mono',monospace;color:var(--am)">$6.2M</td><td><span class="tag tam">Extrajudicial</span></td><td>21 Mar — Email</td><td><div style="display:flex;gap:4px;flex-wrap:wrap">
+      <button class="btn bts btn-sm" onclick="sendWA('Café Delicias')">📱 WhatsApp</button>
+      <button class="btn bts btn-sm" onclick="sendEmail('Café Delicias')">✉️ Email</button>
+      <button class="btn bts btn-sm" onclick="scheduleVisit('Café Delicias')">📅 Visita</button>
+    </div></td></tr>
+    <tr data-etapa="extrajudicial"><td><strong>Librería Central</strong></td><td>Pedro Salcedo</td><td>4D C.Norte</td><td><strong style="color:var(--am)">45</strong></td><td style="font-family:'DM Mono',monospace;color:var(--am)">$4.5M</td><td><span class="tag tam">Extrajudicial</span></td><td>20 Mar — Llamada</td><td><div style="display:flex;gap:4px;flex-wrap:wrap">
+      <button class="btn bts btn-sm" onclick="sendWA('Librería Central')">📱 WhatsApp</button>
+      <button class="btn bts btn-sm" onclick="scheduleVisit('Librería Central')">📅 Visita</button>
+    </div></td></tr>
+    <tr data-etapa="administrativa"><td><strong>Restaurante Mar</strong></td><td>—</td><td>11A P.Mayor</td><td><strong style="color:var(--am)">30</strong></td><td style="font-family:'DM Mono',monospace;color:var(--am)">$3.2M</td><td><span class="tag tam">Administrativa</span></td><td>23 Mar — WhatsApp</td><td><div style="display:flex;gap:4px;flex-wrap:wrap">
+      <button class="btn bts btn-sm" onclick="sendWA('Restaurante Mar')">📱 WhatsApp</button>
+      <button class="btn bts btn-sm" onclick="sendEmail('Restaurante Mar')">✉️ Email</button>
+    </div></td></tr>
+    <tr data-etapa="administrativa"><td><strong>Joyería Oro Fino</strong></td><td>Sara Niño</td><td>3B Paseo</td><td><strong style="color:var(--am)">28</strong></td><td style="font-family:'DM Mono',monospace;color:var(--am)">$2.8M</td><td><span class="tag tam">Administrativa</span></td><td>22 Mar — Email</td><td><div style="display:flex;gap:4px;flex-wrap:wrap">
+      <button class="btn bts btn-sm" onclick="sendWA('Joyería Oro Fino')">📱 WhatsApp</button>
+      <button class="btn bts btn-sm" onclick="sendEmail('Joyería Oro Fino')">✉️ Email</button>
+    </div></td></tr>
+    <tr data-etapa="preventiva"><td><strong>Farmacia Salud</strong></td><td>—</td><td>9A C.Norte</td><td><strong>12</strong></td><td style="font-family:'DM Mono',monospace">$1.9M</td><td><span class="tag tnv">Preventiva</span></td><td>24 Mar — Recordatorio</td><td><div style="display:flex;gap:4px;flex-wrap:wrap">
+      <button class="btn bts btn-sm" onclick="sendWA('Farmacia Salud')">📱 WhatsApp</button>
+    </div></td></tr>
+  </tbody></table>
+</div>
+
+<div class="r2 au4">
+  <div class="card">
+    <div class="ch"><span class="ct">Registrar pago recibido</span></div>
+    <div class="fgrid">
+      <div class="fg"><label class="flabel">Arrendatario</label><select class="fsel"><option>Moda Express S.A.</option><option>TechStore Colombia</option><option>Café Delicias</option><option>Librería Central</option><option>Restaurante Mar</option></select></div>
+      <div class="fg"><label class="flabel">Valor pagado</label><input class="finput" type="number" placeholder="0"/></div>
+      <div class="fg"><label class="flabel">Fecha de pago</label><input class="finput" type="date"/></div>
+      <div class="fg"><label class="flabel">Forma de pago</label><select class="fsel"><option>Transferencia</option><option>Efectivo</option><option>Cheque</option></select></div>
+      <div class="fg full"><label class="flabel">Observaciones</label><textarea class="fta" placeholder="Notas del cobro..."></textarea></div>
+    </div>
+    <div class="faction">
+      <button class="btn btp" onclick="showToast('Pago registrado exitosamente','success')">Registrar pago</button>
+      <button class="btn bts" onclick="document.getElementById('f-cobro').click()">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/></svg>
+        Adjuntar recibo
+      </button>
+      <input type="file" id="f-cobro" accept=".pdf,.jpg,.png" onchange="handleFile(this,'cobro')"/>
+    </div>
+    <div class="fl" id="files-cobro"></div>
+  </div>
+  <div class="card">
+    <div class="ch"><span class="ct">Programar visita de cobro</span></div>
+    <div class="fgrid">
+      <div class="fg"><label class="flabel">Deudor</label><select class="fsel"><option>Moda Express S.A.</option><option>TechStore Colombia</option><option>Café Delicias</option></select></div>
+      <div class="fg"><label class="flabel">Fecha visita</label><input class="finput" type="date"/></div>
+      <div class="fg"><label class="flabel">Hora</label><input class="finput" type="time"/></div>
+      <div class="fg"><label class="flabel">Gestor asignado</label><input class="finput" type="text" placeholder="Nombre del gestor"/></div>
+      <div class="fg full"><label class="flabel">Objetivo de la visita</label><textarea class="fta" placeholder="Acuerdo de pago, notificación, recaudo..."></textarea></div>
+    </div>
+    <div class="faction">
+      <button class="btn btn-nv" onclick="showToast('Visita programada y notificada','success')">Programar visita</button>
+      <button class="btn bts" onclick="showToast('Recordatorio enviado por WhatsApp','success')">📱 Enviar recordatorio</button>
+    </div>
+  </div>
+</div>
+
+<div class="fc au5">
+  <div class="ch"><span class="ct">Cargar documentos de cobranza</span><span class="badge bnv">PDF / CSV / Imágenes</span></div>
+  <div class="r2">
+    <div class="upz" onclick="document.getElementById('f-cart-doc').click()" ondragover="this.classList.add('drag');event.preventDefault()" ondragleave="this.classList.remove('drag')" ondrop="handleDrop(event,'cart-doc')">
+      <input type="file" id="f-cart-doc" accept=".pdf,.jpg,.png" multiple onchange="handleFile(this,'cart-doc')"/>
+      <div class="upz-ico"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--or)" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>
+      <div class="upz-t">Comprobantes y recibos</div>
+      <div class="upz-s">PDF, JPG o PNG</div>
+    </div>
+    <div class="upz" onclick="document.getElementById('f-cart-csv').click()" ondragover="this.classList.add('drag');event.preventDefault()" ondragleave="this.classList.remove('drag')" ondrop="handleDrop(event,'cart-csv')">
+      <input type="file" id="f-cart-csv" accept=".csv,.xlsx" onchange="handleFile(this,'cart-csv')"/>
+      <div class="upz-ico"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--gn)" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div>
+      <div class="upz-t">Importar cartera (CSV/Excel)</div>
+      <div class="upz-s">Actualización masiva de saldos</div>
+    </div>
+  </div>
+  <div class="fl" id="files-cart-doc"></div>
+  <div class="fl" id="files-cart-csv"></div>
+</div>
+</div>
+
+<!-- ======== PAGE: INTERVENTOR ======== -->
+<div class="page" id="page-interventor">
+<div class="note note-nv"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>Interventor — Auditoría de proyectos en curso. Tus reportes alimentan las decisiones de inversión del CEO y el equipo financiero.</div>
+<div class="krow k4 au">
+  <div class="kpi"><div class="kl">Proyectos auditados</div><div class="kv" style="color:var(--nv)">2</div><div class="kd" style="color:var(--tx3)">En curso</div></div>
+  <div class="kpi"><div class="kl">Reportes enviados</div><div class="kv" style="color:var(--gn)">16</div><div class="kd" style="color:var(--gn)">Mes actual</div></div>
+  <div class="kpi"><div class="kl">Alertas emitidas</div><div class="kv" style="color:var(--am)">3</div><div class="kd" style="color:var(--am)">Pendientes acción</div></div>
+  <div class="kpi"><div class="kl">Variación presupuestal</div><div class="kv" style="color:var(--rd)">+$80K</div><div class="kd" style="color:var(--rd)">Torre Norte</div></div>
+</div>
+
+<div class="r2 au2">
+  <div class="card">
+    <div class="ch"><span class="ct">Estado real vs plan — Torre Norte</span><span class="badge bor">72% ejecutado</span></div>
+    <div class="chart-wrap-lg"><canvas id="chartIntTorre"></canvas></div>
+  </div>
+  <div class="card">
+    <div class="ch"><span class="ct">Estado real vs plan — Paseo del Valle</span><span class="badge bnv">43% ejecutado</span></div>
+    <div class="chart-wrap-lg"><canvas id="chartIntPaseo"></canvas></div>
+  </div>
+</div>
+
+<div class="fc au3">
+  <div class="ch"><span class="ct">Emitir informe de auditoría</span></div>
+  <div class="fgrid">
+    <div class="fg"><label class="flabel">Proyecto</label><select class="fsel"><option>Torre Norte — Fase 2</option><option>Expansión Paseo del Valle</option></select></div>
+    <div class="fg"><label class="flabel">Tipo de informe</label><select class="fsel"><option>Semanal</option><option>Quincenal</option><option>Alerta especial</option><option>Cierre de etapa</option></select></div>
+    <div class="fg"><label class="flabel">% avance real verificado</label><input class="finput" type="number" min="0" max="100" placeholder="0–100"/></div>
+    <div class="fg"><label class="flabel">Inversión verificada ($M)</label><input class="finput" type="number" placeholder="0"/></div>
+    <div class="fg"><label class="flabel">¿Conforme al plan?</label><select class="fsel"><option>Sí, conforme</option><option>Retraso leve (&lt;7 días)</option><option>Retraso moderado (7–30 días)</option><option>Retraso crítico (&gt;30 días)</option><option>Alerta de desviación presupuestal</option></select></div>
+    <div class="fg"><label class="flabel">Semana de reporte</label><input class="finput" type="week"/></div>
+    <div class="fg full"><label class="flabel">Descripción técnica del avance</label><textarea class="fta" style="min-height:90px" placeholder="Descripción detallada del estado actual de la obra, calidad de los materiales, cumplimiento de especificaciones técnicas..."></textarea></div>
+    <div class="fg full"><label class="flabel">Recomendaciones al equipo directivo</label><textarea class="fta" placeholder="Decisiones de inversión, ajustes de cronograma, alertas de riesgo..."></textarea></div>
+  </div>
+  <div class="faction">
+    <button class="btn btp" onclick="showToast('Informe de auditoría enviado a Dirección','success')">Enviar informe</button>
+    <button class="btn btn-nv" onclick="showToast('Alerta crítica enviada al CEO y Dir. Financiero','error')">🚨 Emitir alerta crítica</button>
+    <button class="btn bts" onclick="document.getElementById('f-int-sop').click()">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/></svg>
+      Adjuntar soportes fotográficos
+    </button>
+    <input type="file" id="f-int-sop" multiple accept=".jpg,.jpeg,.png,.pdf" onchange="handleFile(this,'int-sop')"/>
+  </div>
+  <div class="fl" id="files-int-sop"></div>
+</div>
+
+<div class="fc au4">
+  <div class="ch"><span class="ct">Informes emitidos</span></div>
+  <div class="ai"><div class="adot dor"></div><div><div class="at">Semana 18 — Torre Norte. Fachada al 85%. <strong>Retraso 7 días</strong> en acabados.</div><div class="ati">Emitido hace 8 días · Pendiente aprobación dirección</div></div></div>
+  <div class="ai"><div class="adot dgn"></div><div><div class="at">Semana 12 — Paseo del Valle. Estructura al 55%, conforme al plan.</div><div class="ati">Emitido hace 2 días · Aprobado</div></div></div>
+  <div class="ai"><div class="adot dgn"></div><div><div class="at">Semana 17 — Torre Norte. Estructura completada 100%.</div><div class="ati">Emitido hace 15 días · Aprobado</div></div></div>
+  <div class="ai"><div class="adot drd"></div><div><div class="at">Alerta especial — Torre Norte: Desviación presupuestal +$80K en materiales de fachada.</div><div class="ati">Emitido hace 18 días · Revisado por Dir. Financiero</div></div></div>
+</div>
+</div>
+
+<!-- ======== PAGE: INVERSIONISTA ======== -->
+<div class="page" id="page-inversionista">
+<div class="inv-header au">
+  <div><div class="ih-label">Mi capital invertido</div><div class="ih-val" id="inv-capital">$4.800M</div></div>
+  <div><div class="ih-label">Mi participación</div><div style="color:rgba(255,255,255,.85);font-family:'DM Mono',monospace;font-size:22px;font-weight:600" id="inv-part">38.7%</div></div>
+  <div style="text-align:right"><div class="ih-label">Mi ROI actual</div><div class="ih-roi" id="inv-roi">18.4%</div></div>
+</div>
+
+<div class="krow k3 au2">
+  <div class="kpi"><div class="kl">Total recibido</div><div class="kv" style="color:var(--gn)">$880M</div><div class="kd" style="color:var(--gn)">Último abono: Mar 2026</div></div>
+  <div class="kpi"><div class="kl">Próximo abono est.</div><div class="kv" style="color:var(--or)">$204M</div><div class="kd" style="color:var(--or)">Entrega Torre Norte · Mar 2026</div></div>
+  <div class="kpi"><div class="kl">Valorización proyecto</div><div class="kv" style="color:var(--nv)">+22%</div><div class="kd" style="color:var(--nv)">Portafolio total</div></div>
+</div>
+
+<div class="r2 au3">
+  <div class="card">
+    <div class="ch"><span class="ct">Evolución de mi inversión</span></div>
+    <div class="chart-wrap-lg"><canvas id="chartInvEvol"></canvas></div>
+  </div>
+  <div class="card">
+    <div class="ch"><span class="ct">ROI histórico vs proyectado</span></div>
+    <div class="chart-wrap-lg"><canvas id="chartInvRoi"></canvas></div>
+  </div>
+</div>
+
+<div class="r2 au4">
+  <div class="card">
+    <div class="ch"><span class="ct">Avance de proyectos</span></div>
+    <div class="bar-row"><div class="bt"><span class="bn2">Torre Norte — Fase 2</span><span class="bp" style="color:var(--or)">72%</span></div><div class="btr" style="height:12px"><div class="bf for" style="--w:72%;width:72%"></div></div><div class="bch"><span class="bc">Entrega: Mar 2026</span><span class="bc">Inversión ejecutada: $2.840M</span></div></div>
+    <div style="height:12px"></div>
+    <div class="bar-row"><div class="bt"><span class="bn2">Expansión Paseo del Valle</span><span class="bp" style="color:var(--nv)">43%</span></div><div class="btr" style="height:12px"><div class="bf fnv" style="--w:43%;width:43%"></div></div><div class="bch"><span class="bc">Entrega: Sep 2026</span><span class="bc">Inversión ejecutada: $1.290M</span></div></div>
+  </div>
+  <div class="card">
+    <div class="ch"><span class="ct">Historial de abonos</span></div>
+    <table class="tbl"><thead><tr><th>Fecha</th><th>Concepto</th><th>Valor</th></tr></thead><tbody>
+      <tr><td>Mar 2026</td><td>Rendimiento mensual</td><td style="font-family:'DM Mono',monospace;color:var(--gn)">$73M</td></tr>
+      <tr><td>Feb 2026</td><td>Rendimiento mensual</td><td style="font-family:'DM Mono',monospace;color:var(--gn)">$71M</td></tr>
+      <tr><td>Ene 2026</td><td>Rendimiento mensual</td><td style="font-family:'DM Mono',monospace;color:var(--gn)">$68M</td></tr>
+      <tr><td>Dic 2025</td><td>Rendimiento + bono trim.</td><td style="font-family:'DM Mono',monospace;color:var(--gn)">$120M</td></tr>
+      <tr><td>Nov 2025</td><td>Rendimiento mensual</td><td style="font-family:'DM Mono',monospace;color:var(--gn)">$65M</td></tr>
+    </tbody></table>
+  </div>
+</div>
+
+<div class="fc au5">
+  <div class="ch"><span class="ct">Reportes recientes disponibles</span></div>
+  <div class="ai"><div class="adot dgn"></div><div><div class="at">Reporte mensual Marzo 2026 — Rendimiento, ocupancia y avance de obras.</div><div class="ati"><button class="btn bts btn-sm" onclick="showToast('Descargando reporte Marzo 2026...','success')" style="margin-top:4px">Descargar PDF</button></div></div></div>
+  <div class="ai"><div class="adot dgn"></div><div><div class="at">Reporte trimestral Q1 2026 — Análisis completo de portafolio y ROI.</div><div class="ati"><button class="btn bts btn-sm" onclick="showToast('Descargando reporte Q1 2026...','success')" style="margin-top:4px">Descargar PDF</button></div></div></div>
+  <div class="ai"><div class="adot dgn"></div><div><div class="at">Actualización de obra — Torre Norte semana 18. Avance fachada y proyección de entrega.</div><div class="ati"><button class="btn bts btn-sm" onclick="showToast('Descargando reporte de obra...','success')" style="margin-top:4px">Descargar PDF</button></div></div></div>
+</div>
+</div>
+
+
+<!-- ======== PAGE: CEO CARTERA COMPLETA ======== -->
+<div class="page" id="page-ceo-cartera">
+<div class="krow k4 au">
+  <div class="kpi"><div class="kl">Total cartera</div><div class="kv" style="color:var(--nv)">$771.5M</div><div class="kd" style="color:var(--tx3)">88% arrendatarios al día</div></div>
+  <div class="kpi"><div class="kl">Mora activa</div><div class="kv" style="color:var(--rd)">$89.5M</div><div class="kd" style="color:var(--rd)">11 cuentas · 3 etapas</div></div>
+  <div class="kpi"><div class="kl">% recuperación</div><div class="kv" style="color:var(--gn)">68.4%</div><div class="kd" style="color:var(--gn)">▲ 4.1% vs mes ant.</div></div>
+  <div class="kpi"><div class="kl">Ingresos netos</div><div class="kv" style="color:var(--or)">$824M</div><div class="kd" style="color:var(--tx3)">Marzo 2026 · 3 centros</div></div>
+</div>
+<div class="r2 au2">
+  <div class="card">
+    <div class="ch"><span class="ct">Distribución de cartera</span><span class="badge bgn">$771.5M total</span></div>
+    <div class="chart-wrap"><canvas id="chartCarteraDonut"></canvas></div>
+  </div>
+  <div class="card">
+    <div class="ch"><span class="ct">Mora por antigüedad</span><span class="badge brd">$89.5M en mora</span></div>
+    <div class="chart-wrap"><canvas id="chartMoraAntiguedad"></canvas></div>
+  </div>
+</div>
+<div class="fc au3">
+  <div class="ch"><span class="ct">Top 10 deudores</span><span class="badge brd">Saldo mayor a $1M</span></div>
+  <table class="tbl"><thead><tr><th>#</th><th>Titular</th><th>Local</th><th>Días mora</th><th>Saldo</th><th>Etapa</th><th>Gestor</th></tr></thead><tbody>
+    <tr><td style="color:var(--tx3);font-size:12px">1</td><td><strong>Moda Express S.A.</strong></td><td>23B C.Norte</td><td><strong style="color:var(--rd)">94</strong></td><td style="font-family:'DM Mono',monospace;color:var(--rd)">$18.4M</td><td><span class="tag trd">Pre-jurídico</span></td><td>J. Torres</td></tr>
+    <tr><td style="color:var(--tx3);font-size:12px">2</td><td><strong>TechStore Colombia</strong></td><td>12C Paseo</td><td><strong style="color:var(--rd)">182</strong></td><td style="font-family:'DM Mono',monospace;color:var(--rd)">$9.1M</td><td><span class="tag trd">Jurídico</span></td><td>J. Torres</td></tr>
+    <tr><td style="color:var(--tx3);font-size:12px">3</td><td><strong>Café Delicias</strong></td><td>5A P.Mayor</td><td><strong style="color:var(--am)">58</strong></td><td style="font-family:'DM Mono',monospace;color:var(--am)">$6.2M</td><td><span class="tag tam">Extrajudicial</span></td><td>L. Gómez</td></tr>
+    <tr><td style="color:var(--tx3);font-size:12px">4</td><td><strong>Librería Central</strong></td><td>4D C.Norte</td><td><strong style="color:var(--am)">45</strong></td><td style="font-family:'DM Mono',monospace;color:var(--am)">$4.5M</td><td><span class="tag tam">Extrajudicial</span></td><td>L. Gómez</td></tr>
+    <tr><td style="color:var(--tx3);font-size:12px">5</td><td><strong>Restaurante Mar</strong></td><td>11A P.Mayor</td><td><strong style="color:var(--am)">30</strong></td><td style="font-family:'DM Mono',monospace;color:var(--am)">$3.2M</td><td><span class="tag tam">Administrativa</span></td><td>M. Vera</td></tr>
+    <tr><td style="color:var(--tx3);font-size:12px">6</td><td><strong>Joyería Oro Fino</strong></td><td>3B Paseo</td><td><strong style="color:var(--am)">28</strong></td><td style="font-family:'DM Mono',monospace;color:var(--am)">$2.8M</td><td><span class="tag tam">Administrativa</span></td><td>M. Vera</td></tr>
+    <tr><td style="color:var(--tx3);font-size:12px">7</td><td><strong>Farmacia Salud</strong></td><td>9A C.Norte</td><td><strong>12</strong></td><td style="font-family:'DM Mono',monospace">$1.9M</td><td><span class="tag tnv">Preventiva</span></td><td>L. Gómez</td></tr>
+    <tr><td style="color:var(--tx3);font-size:12px">8</td><td><strong>Optica Visión</strong></td><td>7C P.Mayor</td><td><strong>10</strong></td><td style="font-family:'DM Mono',monospace">$1.6M</td><td><span class="tag tnv">Preventiva</span></td><td>M. Vera</td></tr>
+    <tr><td style="color:var(--tx3);font-size:12px">9</td><td><strong>Helados Frío</strong></td><td>2A Paseo</td><td><strong>8</strong></td><td style="font-family:'DM Mono',monospace">$1.2M</td><td><span class="tag tnv">Preventiva</span></td><td>J. Torres</td></tr>
+    <tr><td style="color:var(--tx3);font-size:12px">10</td><td><strong>Zapatería Paso</strong></td><td>6B C.Norte</td><td><strong>6</strong></td><td style="font-family:'DM Mono',monospace">$1.1M</td><td><span class="tag tnv">Preventiva</span></td><td>L. Gómez</td></tr>
+  </tbody></table>
+</div>
+</div>
+
+<!-- ======== PAGE: INVERSIONISTAS ======== -->
+<div class="page" id="page-inversionistas">
+<div class="krow k4 au">
+  <div class="kpi"><div class="kl">Capital total invertido</div><div class="kv" style="color:var(--nv)">$29.400M</div><div class="kd" style="color:var(--tx3)">3 socios activos</div></div>
+  <div class="kpi"><div class="kl">ROI promedio</div><div class="kv" style="color:var(--gn)">17.4%</div><div class="kd" style="color:var(--gn)">▲ 1.2% vs año ant.</div></div>
+  <div class="kpi"><div class="kl">Abonos este mes</div><div class="kv" style="color:var(--or)">$448M</div><div class="kd" style="color:var(--tx3)">Marzo 2026</div></div>
+  <div class="kpi"><div class="kl">Valorización media</div><div class="kv" style="color:var(--nv)">+21.3%</div><div class="kd" style="color:var(--nv)">Portafolio total</div></div>
+</div>
+<div class="r2 au2">
+  <div class="card">
+    <div class="ch"><span class="ct">ROI comparativo — actual vs proyectado</span><span class="badge bor">3 inversionistas</span></div>
+    <div class="chart-wrap"><canvas id="chartInvROI"></canvas></div>
+  </div>
+  <div class="card">
+    <div class="ch"><span class="ct">Resumen de portafolio</span></div>
+    <table class="tbl"><thead><tr><th>Inversionista</th><th>Capital</th><th>Part. %</th><th>ROI actual</th><th>Abono Mar</th><th></th></tr></thead><tbody>
+      <tr>
+        <td><strong>Grupo A</strong><div style="font-size:10px;color:var(--tx3)">Holding patrimonial</div></td>
+        <td style="font-family:'DM Mono',monospace">$12.400M</td>
+        <td><span style="font-family:'DM Mono',monospace;color:var(--nv)">42.1%</span></td>
+        <td><span style="font-family:'DM Mono',monospace;color:var(--gn)">18.4%</span></td>
+        <td style="font-family:'DM Mono',monospace;color:var(--gn)">$189M</td>
+        <td><button class="btn bts btn-sm" onclick="openInvModal('Grupo A')">Ver detalle</button></td>
+      </tr>
+      <tr>
+        <td><strong>Fondo B</strong><div style="font-size:10px;color:var(--tx3)">Fondo privado</div></td>
+        <td style="font-family:'DM Mono',monospace">$9.800M</td>
+        <td><span style="font-family:'DM Mono',monospace;color:var(--nv)">33.3%</span></td>
+        <td><span style="font-family:'DM Mono',monospace;color:var(--gn)">16.9%</span></td>
+        <td style="font-family:'DM Mono',monospace;color:var(--gn)">$149M</td>
+        <td><button class="btn bts btn-sm" onclick="openInvModal('Fondo B')">Ver detalle</button></td>
+      </tr>
+      <tr>
+        <td><strong>Inversionista C</strong><div style="font-size:10px;color:var(--tx3)">Persona natural</div></td>
+        <td style="font-family:'DM Mono',monospace">$7.200M</td>
+        <td><span style="font-family:'DM Mono',monospace;color:var(--nv)">24.5%</span></td>
+        <td><span style="font-family:'DM Mono',monospace;color:var(--gn)">16.8%</span></td>
+        <td style="font-family:'DM Mono',monospace;color:var(--gn)">$110M</td>
+        <td><button class="btn bts btn-sm" onclick="openInvModal('Inversionista C')">Ver detalle</button></td>
+      </tr>
+    </tbody></table>
+  </div>
+</div>
+</div>
+
+<!-- ======== PAGE: FIN CARTERA Y ACUERDOS ======== -->
+<div class="page" id="page-fin-cartera">
+<div class="krow k4 au">
+  <div class="kpi"><div class="kl">Mora total</div><div class="kv" style="color:var(--rd)">$89.5M</div><div class="kd" style="color:var(--rd)">11 cuentas activas</div></div>
+  <div class="kpi"><div class="kl">Acuerdos vigentes</div><div class="kv" style="color:var(--nv)">4</div><div class="kd" style="color:var(--nv)">$22.4M pactados</div></div>
+  <div class="kpi"><div class="kl">Recuperado YTD</div><div class="kv" style="color:var(--gn)">$84M</div><div class="kd" style="color:var(--gn)">Ene–Mar 2026</div></div>
+  <div class="kpi"><div class="kl">Próximo vencimiento</div><div class="kv" style="color:var(--am)">28 Mar</div><div class="kd" style="color:var(--am)">Café Delicias · $2.1M</div></div>
+</div>
+<div class="fc au2">
+  <div class="ch">
+    <span class="ct">Cartera en mora</span>
+    <span class="badge brd">$89.5M</span>
+    <button class="btn bts btn-sm" onclick="exportCSV()" style="margin-left:auto">⬇ Exportar CSV</button>
+  </div>
+  <table class="tbl" id="mora-table"><thead><tr><th>Titular</th><th>Codeudor</th><th>Local</th><th>Días mora</th><th>Saldo</th><th>Etapa</th><th>Última gestión</th></tr></thead><tbody id="mora-tbody">
+    <tr data-etapa="prejuridico"><td><strong>Moda Express S.A.</strong></td><td>Jorge Mena</td><td>23B C.Norte</td><td><strong style="color:var(--rd)">94</strong></td><td style="font-family:'DM Mono',monospace;color:var(--rd)">$18.4M</td><td><span class="tag trd">Pre-jurídico</span></td><td>22 Mar — WhatsApp</td></tr>
+    <tr data-etapa="juridico"><td><strong>TechStore Colombia</strong></td><td>Ana Vera</td><td>12C Paseo</td><td><strong style="color:var(--rd)">182</strong></td><td style="font-family:'DM Mono',monospace;color:var(--rd)">$9.1M</td><td><span class="tag trd">Jurídico</span></td><td>18 Mar — Visita</td></tr>
+    <tr data-etapa="extrajudicial"><td><strong>Café Delicias</strong></td><td>—</td><td>5A P.Mayor</td><td><strong style="color:var(--am)">58</strong></td><td style="font-family:'DM Mono',monospace;color:var(--am)">$6.2M</td><td><span class="tag tam">Extrajudicial</span></td><td>21 Mar — Email</td></tr>
+    <tr data-etapa="extrajudicial"><td><strong>Librería Central</strong></td><td>Pedro Salcedo</td><td>4D C.Norte</td><td><strong style="color:var(--am)">45</strong></td><td style="font-family:'DM Mono',monospace;color:var(--am)">$4.5M</td><td><span class="tag tam">Extrajudicial</span></td><td>20 Mar — Llamada</td></tr>
+    <tr data-etapa="administrativa"><td><strong>Restaurante Mar</strong></td><td>—</td><td>11A P.Mayor</td><td><strong style="color:var(--am)">30</strong></td><td style="font-family:'DM Mono',monospace;color:var(--am)">$3.2M</td><td><span class="tag tam">Administrativa</span></td><td>23 Mar — WhatsApp</td></tr>
+    <tr data-etapa="administrativa"><td><strong>Joyería Oro Fino</strong></td><td>Sara Niño</td><td>3B Paseo</td><td><strong style="color:var(--am)">28</strong></td><td style="font-family:'DM Mono',monospace;color:var(--am)">$2.8M</td><td><span class="tag tam">Administrativa</span></td><td>22 Mar — Email</td></tr>
+    <tr data-etapa="preventiva"><td><strong>Farmacia Salud</strong></td><td>—</td><td>9A C.Norte</td><td><strong>12</strong></td><td style="font-family:'DM Mono',monospace">$1.9M</td><td><span class="tag tnv">Preventiva</span></td><td>24 Mar — Recordatorio</td></tr>
+  </tbody></table>
+</div>
+<div class="fc au3">
+  <div class="ch"><span class="ct">Acuerdos de pago vigentes</span><span class="badge bnv">4 activos</span></div>
+  <table class="tbl"><thead><tr><th>Titular</th><th>Saldo total</th><th>Cuotas pactadas</th><th>Próximo pago</th><th>Valor cuota</th><th>Estado</th></tr></thead><tbody>
+    <tr><td><strong>Café Delicias</strong></td><td style="font-family:'DM Mono',monospace">$6.2M</td><td>3 cuotas mensuales</td><td style="color:var(--am)">28 Mar 2026</td><td style="font-family:'DM Mono',monospace;color:var(--nv)">$2.1M</td><td><span class="tag tnv">Al día</span></td></tr>
+    <tr><td><strong>Librería Central</strong></td><td style="font-family:'DM Mono',monospace">$4.5M</td><td>2 cuotas mensuales</td><td style="color:var(--am)">5 Abr 2026</td><td style="font-family:'DM Mono',monospace;color:var(--nv)">$2.25M</td><td><span class="tag tnv">Al día</span></td></tr>
+    <tr><td><strong>Restaurante Mar</strong></td><td style="font-family:'DM Mono',monospace">$3.2M</td><td>4 cuotas mensuales</td><td style="color:var(--or)">1 Abr 2026</td><td style="font-family:'DM Mono',monospace;color:var(--nv)">$0.8M</td><td><span class="tag tam">En seguimiento</span></td></tr>
+    <tr><td><strong>Farmacia Salud</strong></td><td style="font-family:'DM Mono',monospace">$1.9M</td><td>2 cuotas mensuales</td><td>15 Abr 2026</td><td style="font-family:'DM Mono',monospace;color:var(--nv)">$0.95M</td><td><span class="tag tnv">Al día</span></td></tr>
+  </tbody></table>
+</div>
+</div>
+
+<!-- ======== PAGE: COMERCIAL AGENTES ======== -->
+<div class="page" id="page-comercial-agentes">
+<div class="krow k4 au">
+  <div class="kpi"><div class="kl">Agentes activos</div><div class="kv" style="color:var(--nv)">3</div><div class="kd" style="color:var(--tx3)">Equipo comercial</div></div>
+  <div class="kpi"><div class="kl">Prospectos totales</div><div class="kv" style="color:var(--or)">48</div><div class="kd" style="color:var(--tx3)">En pipeline activo</div></div>
+  <div class="kpi"><div class="kl">Cierres este mes</div><div class="kv" style="color:var(--gn)">5</div><div class="kd" style="color:var(--gn)">$21.4M en contratos</div></div>
+  <div class="kpi"><div class="kl">Conversión media</div><div class="kv" style="color:var(--nv)">22%</div><div class="kd" style="color:var(--tx3)">Prospecto → Contrato</div></div>
+</div>
+<div class="fc au2">
+  <div class="ch"><span class="ct">Vista por agente</span><span class="badge bnv">3 agentes</span></div>
+  <table class="tbl" style="border-collapse:collapse">
+
+    <!-- AGENTE MR -->
+    <thead>
+      <tr onclick="toggleAgente('ag-MR',this)" style="cursor:pointer;background:var(--sf2)">
+        <th style="text-align:left;padding:10px 12px;font-weight:600;width:100%">
+          <span class="ag-arrow" style="display:inline-block;transition:transform .2s;margin-right:8px">▶</span>
+          María Rodríguez
+          <span style="font-weight:400;color:var(--tx3);margin-left:8px;font-size:11px">MR · 19 prospectos</span>
+        </th>
+        <th style="white-space:nowrap;padding:10px 12px;color:var(--gn)">3 cierres</th>
+        <th style="white-space:nowrap;padding:10px 12px;color:var(--tx3)">Conv. 26%</th>
+        <th style="white-space:nowrap;padding:10px 12px;color:var(--or)">$9.2M pot.</th>
+      </tr>
+    </thead>
+    <tbody id="ag-MR" style="display:none">
+      <tr style="background:var(--bg)"><th style="padding:7px 12px;color:var(--tx3);font-size:11px;font-weight:500">Empresa</th><th style="padding:7px 12px;color:var(--tx3);font-size:11px;font-weight:500">Local interés</th><th style="padding:7px 12px;color:var(--tx3);font-size:11px;font-weight:500">Etapa</th><th style="padding:7px 12px;color:var(--tx3);font-size:11px;font-weight:500">Canon pot.</th></tr>
+      <tr><td style="padding:8px 12px">Zara Colombia</td><td>14A C.Norte</td><td><span class="tag tgn">Cierre</span></td><td style="font-family:'DM Mono',monospace;color:var(--gn)">$3.8M</td></tr>
+      <tr><td style="padding:8px 12px">Starbucks EF</td><td>8B P.Mayor</td><td><span class="tag tgn">Cierre</span></td><td style="font-family:'DM Mono',monospace;color:var(--gn)">$2.1M</td></tr>
+      <tr><td style="padding:8px 12px">Nike Store</td><td>22C C.Norte</td><td><span class="tag tor">Negociando</span></td><td style="font-family:'DM Mono',monospace;color:var(--or)">$1.9M</td></tr>
+      <tr><td style="padding:8px 12px">H&amp;M Colombia</td><td>3A Paseo</td><td><span class="tag tor">Negociando</span></td><td style="font-family:'DM Mono',monospace;color:var(--or)">$1.4M</td></tr>
+      <tr><td style="padding:8px 12px;color:var(--tx3)" colspan="4">+ 15 prospectos en etapas iniciales</td></tr>
+    </tbody>
+
+    <!-- AGENTE AL -->
+    <thead>
+      <tr onclick="toggleAgente('ag-AL',this)" style="cursor:pointer;background:var(--sf2)">
+        <th style="text-align:left;padding:10px 12px;font-weight:600">
+          <span class="ag-arrow" style="display:inline-block;transition:transform .2s;margin-right:8px">▶</span>
+          Andrés López
+          <span style="font-weight:400;color:var(--tx3);margin-left:8px;font-size:11px">AL · 17 prospectos</span>
+        </th>
+        <th style="white-space:nowrap;padding:10px 12px;color:var(--gn)">1 cierre</th>
+        <th style="white-space:nowrap;padding:10px 12px;color:var(--tx3)">Conv. 18%</th>
+        <th style="white-space:nowrap;padding:10px 12px;color:var(--or)">$7.6M pot.</th>
+      </tr>
+    </thead>
+    <tbody id="ag-AL" style="display:none">
+      <tr style="background:var(--bg)"><th style="padding:7px 12px;color:var(--tx3);font-size:11px;font-weight:500">Empresa</th><th style="padding:7px 12px;color:var(--tx3);font-size:11px;font-weight:500">Local interés</th><th style="padding:7px 12px;color:var(--tx3);font-size:11px;font-weight:500">Etapa</th><th style="padding:7px 12px;color:var(--tx3);font-size:11px;font-weight:500">Canon pot.</th></tr>
+      <tr><td style="padding:8px 12px">Bancolombia Ext.</td><td>19D C.Norte</td><td><span class="tag tgn">Cierre</span></td><td style="font-family:'DM Mono',monospace;color:var(--gn)">$2.8M</td></tr>
+      <tr><td style="padding:8px 12px">Adidas Sport</td><td>11B P.Mayor</td><td><span class="tag tor">Negociando</span></td><td style="font-family:'DM Mono',monospace;color:var(--or)">$2.2M</td></tr>
+      <tr><td style="padding:8px 12px">Óptica Colombia</td><td>6C Paseo</td><td><span class="tag tam">En visita</span></td><td style="font-family:'DM Mono',monospace;color:var(--am)">$1.5M</td></tr>
+      <tr><td style="padding:8px 12px;color:var(--tx3)" colspan="4">+ 14 prospectos en etapas iniciales</td></tr>
+    </tbody>
+
+    <!-- AGENTE JP -->
+    <thead>
+      <tr onclick="toggleAgente('ag-JP',this)" style="cursor:pointer;background:var(--sf2)">
+        <th style="text-align:left;padding:10px 12px;font-weight:600">
+          <span class="ag-arrow" style="display:inline-block;transition:transform .2s;margin-right:8px">▶</span>
+          Juliana Peña
+          <span style="font-weight:400;color:var(--tx3);margin-left:8px;font-size:11px">JP · 12 prospectos</span>
+        </th>
+        <th style="white-space:nowrap;padding:10px 12px;color:var(--gn)">1 cierre</th>
+        <th style="white-space:nowrap;padding:10px 12px;color:var(--tx3)">Conv. 21%</th>
+        <th style="white-space:nowrap;padding:10px 12px;color:var(--or)">$4.6M pot.</th>
+      </tr>
+    </thead>
+    <tbody id="ag-JP" style="display:none">
+      <tr style="background:var(--bg)"><th style="padding:7px 12px;color:var(--tx3);font-size:11px;font-weight:500">Empresa</th><th style="padding:7px 12px;color:var(--tx3);font-size:11px;font-weight:500">Local interés</th><th style="padding:7px 12px;color:var(--tx3);font-size:11px;font-weight:500">Etapa</th><th style="padding:7px 12px;color:var(--tx3);font-size:11px;font-weight:500">Canon pot.</th></tr>
+      <tr><td style="padding:8px 12px">Decathlon EF</td><td>31A C.Norte</td><td><span class="tag tgn">Cierre</span></td><td style="font-family:'DM Mono',monospace;color:var(--gn)">$2.4M</td></tr>
+      <tr><td style="padding:8px 12px">Subway Local</td><td>4D P.Mayor</td><td><span class="tag tor">Negociando</span></td><td style="font-family:'DM Mono',monospace;color:var(--or)">$1.1M</td></tr>
+      <tr><td style="padding:8px 12px">Papelería Arte</td><td>9B Paseo</td><td><span class="tag tam">En visita</span></td><td style="font-family:'DM Mono',monospace;color:var(--am)">$0.8M</td></tr>
+      <tr><td style="padding:8px 12px;color:var(--tx3)" colspan="4">+ 9 prospectos en etapas iniciales</td></tr>
+    </tbody>
+
+  </table>
+</div>
+</div>
+
+    </div><!-- /pc -->
+  </div><!-- /main -->
+  <div id="drawer-overlay" onclick="toggleDrawer(false)"></div>
+</div><!-- /shell -->
+</div><!-- /app-screen -->
+
+<!-- MODALS -->
+<div id="modal-lead" style="display:none" class="mo" onclick="if(event.target===this)closeModal('modal-lead')">
+  <div class="mb">
+    <div class="mh"><span class="mt2">Registrar / editar prospecto</span><div class="mc" onclick="closeModal('modal-lead')">✕</div></div>
+    <div class="fgrid">
+      <div class="fg"><label class="flabel">Empresa / Marca</label><input class="finput" type="text" placeholder="Nombre de la empresa"/></div>
+      <div class="fg"><label class="flabel">Contacto</label><input class="finput" type="text" placeholder="Nombre del contacto"/></div>
+      <div class="fg"><label class="flabel">Teléfono</label><input class="finput" type="tel" placeholder="Cel. / teléfono"/></div>
+      <div class="fg"><label class="flabel">Correo</label><input class="finput" type="email" placeholder="correo@empresa.com"/></div>
+      <div class="fg"><label class="flabel">Centro comercial</label><select class="fsel"><option>Plaza Mayor</option><option>Centro Norte</option><option>Paseo del Valle</option></select></div>
+      <div class="fg"><label class="flabel">Local de interés</label><input class="finput" type="text" placeholder="Ej: 14A"/></div>
+      <div class="fg"><label class="flabel">Etapa CRM</label><select class="fsel"><option>Nuevo prospecto</option><option>En visita</option><option>Negociando</option><option>Cierre / Contrato</option></select></div>
+      <div class="fg"><label class="flabel">Agente asignado</label><select class="fsel"><option>María Rodríguez</option><option>Andrés López</option><option>Juliana Peña</option></select></div>
+      <div class="fg"><label class="flabel">Fecha próxima visita</label><input class="finput" type="date"/></div>
+      <div class="fg"><label class="flabel">Canon esperado</label><input class="finput" type="number" placeholder="0"/></div>
+      <div class="fg full"><label class="flabel">Notas de gestión</label><textarea class="fta" placeholder="Observaciones, compromisos, próximos pasos..."></textarea></div>
+    </div>
+    <div class="faction">
+      <button class="btn btp" onclick="showToast('Prospecto guardado en CRM','success');closeModal('modal-lead')">Guardar prospecto</button>
+      <button class="btn bts" onclick="closeModal('modal-lead')">Cancelar</button>
+    </div>
+  </div>
+</div>
+
+<div id="modal-local" style="display:none" class="mo" onclick="if(event.target===this)closeModal('modal-local')">
+  <div class="mb">
+    <div class="mh"><span class="mt2">Asignar local a prospecto</span><div class="mc" onclick="closeModal('modal-local')">✕</div></div>
+    <div class="fgrid">
+      <div class="fg"><label class="flabel">Local</label><select class="fsel"><option>Local 31C — Centro Norte</option><option>Local 8B — Centro Norte</option><option>Local 19D — Centro Norte</option></select></div>
+      <div class="fg"><label class="flabel">Prospecto</label><select class="fsel"><option>Zara Colombia</option><option>Starbucks EF</option><option>Nike Store</option><option>Bancolombia Ext.</option></select></div>
+      <div class="fg"><label class="flabel">Fecha de visita</label><input class="finput" type="date"/></div>
+      <div class="fg"><label class="flabel">Agente</label><select class="fsel"><option>María Rodríguez</option><option>Andrés López</option><option>Juliana Peña</option></select></div>
+      <div class="fg full"><label class="flabel">Notas</label><textarea class="fta" placeholder="Condiciones especiales, descuentos..."></textarea></div>
+    </div>
+    <div class="faction">
+      <button class="btn btp" onclick="showToast('Local asignado al prospecto','success');closeModal('modal-local')">Asignar</button>
+      <button class="btn bts" onclick="closeModal('modal-local')">Cancelar</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL INVERSIONISTA -->
+<div id="modal-inv" style="display:none" class="mo" onclick="if(event.target===this)closeModal('modal-inv')">
+  <div class="mb" style="max-width:520px">
+    <div class="mh">
+      <span class="mt2" id="inv-modal-name">Inversionista</span>
+      <div class="mc" onclick="closeModal('modal-inv')">✕</div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:16px">
+      <div style="background:var(--sf2);border-radius:10px;padding:12px">
+        <div style="font-size:10px;color:var(--tx3);margin-bottom:3px">Capital invertido</div>
+        <div style="font-family:'DM Mono',monospace;font-size:16px;font-weight:600;color:var(--nv)" id="inv-modal-capital">—</div>
+      </div>
+      <div style="background:var(--sf2);border-radius:10px;padding:12px">
+        <div style="font-size:10px;color:var(--tx3);margin-bottom:3px">ROI actual</div>
+        <div style="font-family:'DM Mono',monospace;font-size:16px;font-weight:600;color:var(--gn)" id="inv-modal-roi">—</div>
+      </div>
+      <div style="background:var(--sf2);border-radius:10px;padding:12px">
+        <div style="font-size:10px;color:var(--tx3);margin-bottom:3px">Participación</div>
+        <div style="font-family:'DM Mono',monospace;font-size:16px;font-weight:600;color:var(--or)" id="inv-modal-part">—</div>
+      </div>
+    </div>
+    <div style="font-size:12px;font-weight:600;color:var(--tx2);margin-bottom:8px">Historial de abonos</div>
+    <table class="tbl"><thead><tr><th>Fecha</th><th>Concepto</th><th>Valor</th></tr></thead>
+      <tbody id="inv-modal-tbody"></tbody>
+    </table>
+    <div class="faction" style="margin-top:16px">
+      <button class="btn btp" onclick="showToast('Descargando reporte del inversionista...','success')">Descargar PDF</button>
+      <button class="btn bts" onclick="closeModal('modal-inv')">Cerrar</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast-wrap" id="tw"></div>
+
+<script>
+// ===== DATA =====
+const ROLES = {
+  CEO: {label:'CEO / Empresario',initials:'CE',role:'Gerencia General',
+    nav:[{g:'General',items:[{id:'ceo-dashboard',l:'Dashboard',ic:'grid'},{id:'ceo-ocupancia',l:'Ocupancia',ic:'home'},{id:'ceo-proyecciones',l:'Proyecciones',ic:'trending'}]},
+         {g:'Gestión',items:[{id:'comercial-crm',l:'Pipeline Comercial',ic:'users'},{id:'ceo-cartera',l:'Cartera completa',ic:'dollar'},{id:'inversionistas',l:'Inversionistas',ic:'bar'}]}]},
+  Financiero: {label:'Dir. Financiero',initials:'DF',role:'Finanzas',
+    nav:[{g:'Mi área',items:[{id:'fin-dashboard',l:'Dashboard Financiero',ic:'dollar'},{id:'fin-obra',l:'Control de Obra',ic:'layers'},{id:'ceo-proyecciones',l:'Proyecciones',ic:'trending'},{id:'fin-cartera',l:'Cartera y Acuerdos',ic:'check'}]}]},
+  Obra: {label:'Dir. de Obra',initials:'DO',role:'Construcción',
+    nav:[{g:'Mi área',items:[{id:'obra-main',l:'Seguimiento de Obra',ic:'layers'}]}]},
+  Comercial: {label:'Equipo Comercial',initials:'EC',role:'Arrendamientos',
+    nav:[{g:'Mi área',items:[{id:'comercial-crm',l:'CRM — Pipeline',ic:'users'},{id:'comercial-ocupancia',l:'Locales disponibles',ic:'home'},{id:'comercial-agentes',l:'Vista por agente',ic:'users'}]}]},
+  Cobranza: {label:'Área de Cobranza',initials:'CO',role:'Recuperación cartera',
+    nav:[{g:'Mi área',items:[{id:'cobranza',l:'Gestión de Mora',ic:'dollar'}]}]},
+  Interventor: {label:'Interventor',initials:'IN',role:'Auditoría de obra',
+    nav:[{g:'Mi área',items:[{id:'interventor',l:'Informes de Auditoría',ic:'check'}]}]},
+  Inversionista: {label:'Inversionista',initials:'IV',role:'Portafolio',
+    nav:[{g:'Mi inversión',items:[{id:'inversionista',l:'Mi inversión y reportes',ic:'bar'}]}]}
+};
+const PAGE_TITLES = {
+  'ceo-dashboard':'Dashboard general','ceo-ocupancia':'Ocupancia & locales','ceo-proyecciones':'Proyecciones financieras',
+  'fin-dashboard':'Control financiero','fin-obra':'Control financiero de obra',
+  'obra-main':'Seguimiento de obra','comercial-crm':'CRM comercial — Pipeline',
+  'comercial-ocupancia':'Locales disponibles','cobranza':'Gestión de mora y cobranza',
+  'interventor':'Informes de auditoría','inversionista':'Mi inversión',
+  'ceo-cartera':'Cartera completa','inversionistas':'Panel de inversionistas',
+  'fin-cartera':'Cartera y acuerdos de pago','comercial-agentes':'Vista por agente'
+};
+const ICONS = {
+  grid:'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>',
+  home:'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>',
+  dollar:'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>',
+  layers:'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>',
+  users:'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>',
+  trending:'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>',
+  bar:'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>',
+  check:'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>'
+};
+
+let curRole='', chartsBuilt={};
+
+function doLogin(role){
+  if(!role||!ROLES[role]) role='CEO';
+  curRole=role;
+  sessionStorage.setItem('ef_role',role);
+  history.replaceState(null,'','#'+role);
+  document.getElementById('login-screen').style.display='none';
+  document.getElementById('app-screen').style.display='block';
+  const cfg=ROLES[role];
+  document.getElementById('sb-av').textContent=cfg.initials;
+  document.getElementById('sb-un').textContent=cfg.label;
+  document.getElementById('sb-ur').textContent=cfg.role;
+  buildNav(role);
+  goTo(ROLES[role].nav[0].items[0].id);
+}
+
+function buildNav(role){
+  const nav=document.getElementById('sb-nav');
+  nav.innerHTML='';
+  ROLES[role].nav.forEach(g=>{
+    const gl=document.createElement('div');gl.className='ngl';gl.textContent=g.g;nav.appendChild(gl);
+    g.items.forEach(item=>{
+      const el=document.createElement('div');el.className='ni';el.id='ni-'+item.id;
+      el.innerHTML=(ICONS[item.ic]||ICONS.grid)+'<span class="nl">'+item.l+'</span>';
+      el.onclick=()=>goTo(item.id);
+      nav.appendChild(el);
+    });
+  });
+}
+
+function toggleDrawer(show){
+  const sb=document.querySelector('.sb');
+  const ov=document.getElementById('drawer-overlay');
+  if(!sb||!ov)return;
+  sb.classList.toggle('drawer-open',show);
+  ov.classList.toggle('drawer-open',show);
+}
+
+function goTo(pid){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('on'));
+  document.querySelectorAll('.ni').forEach(n=>n.classList.remove('on'));
+  const pg=document.getElementById('page-'+pid);
+  if(pg){pg.classList.add('on');window.scrollTo(0,0);}
+  const ni=document.getElementById('ni-'+pid);
+  if(ni)ni.classList.add('on');
+  document.getElementById('tb-title').textContent=PAGE_TITLES[pid]||pid;
+  setTimeout(()=>buildCharts(pid),80);
+  if(window.innerWidth<=768)toggleDrawer(false);
+}
+
+function doLogout(){
+  sessionStorage.removeItem('ef_role');
+  history.replaceState(null,'','#');
+  document.getElementById('app-screen').style.display='none';
+  document.getElementById('login-screen').style.display='block';
+  chartsBuilt={};
+  Object.values(Chart.instances||{}).forEach(c=>{try{c.destroy()}catch(e){}});
+}
+
+// ===== CHARTS =====
+const COR='#E8541A',CNV='#1E2D5A',CGN='#1A7A4A',CAM='#C47C00',CRD='#B83030';
+const ALPHA=a=>hex=>{const r=parseInt(hex.slice(1,3),16),g=parseInt(hex.slice(3,5),16),b=parseInt(hex.slice(5,7),16);return `rgba(${r},${g},${b},${a})`;};
+const a20=ALPHA(.20),a40=ALPHA(.40),a60=ALPHA(.60),a80=ALPHA(.80);
+
+function bc(id,type,data,opts){
+  const el=document.getElementById(id);
+  if(!el||chartsBuilt[id])return;
+  const ex=Chart.getChart(id);if(ex)ex.destroy();
+  chartsBuilt[id]=true;
+  const defaults={responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{backgroundColor:'#1E2D5A',titleColor:'#fff',bodyColor:'rgba(255,255,255,.75)',padding:10,cornerRadius:8}},scales:{x:{grid:{display:false},ticks:{color:'#A09D98',font:{size:10}}},y:{grid:{color:'rgba(0,0,0,.04)'},ticks:{color:'#A09D98',font:{size:10}}}}};
+  if(type==='doughnut'||type==='pie'){delete defaults.scales;}
+  new Chart(el,{type,data,options:{...defaults,...opts}});
+}
+
+function buildCharts(pid){
+  if(pid==='ceo-dashboard'){
+    bc('chartOcupancia','bar',{labels:['Plaza Mayor','Centro Norte','Paseo Valle'],datasets:[{label:'Ocupancia %',data:[91,78,88],backgroundColor:[a80(COR),a80(CAM),a80(COR)],borderColor:[COR,CAM,COR],borderWidth:2,borderRadius:6}]},{plugins:{legend:{display:false}}});
+    bc('chartIngresos','line',{labels:['Oct','Nov','Dict','Ene','Feb','Mar'],datasets:[{label:'Ingresos $M',data:[740,762,798,810,785,824],borderColor:CGN,backgroundColor:a20(CGN),fill:true,tension:.4,pointBackgroundColor:CGN,pointRadius:4}]});
+    bc('chartPipeline','bar',{labels:['Nuevo','En visita','Negociando','Cierre'],datasets:[{data:[24,14,7,3],backgroundColor:[a80(CNV),a80(CAM),a80(COR),a80(CGN)],borderRadius:5}]},{scales:{x:{grid:{display:false},ticks:{color:'#A09D98',font:{size:9}}},y:{display:false}},plugins:{legend:{display:false}}});
+    bc('chartObras','bar',{labels:['Cimentación','Estructura','Fachada','Acabados','Instal.'],datasets:[{label:'Plan',data:[100,100,90,60,35],backgroundColor:a20(COR)},{label:'Real',data:[100,100,85,40,20],backgroundColor:a80(COR),borderRadius:4}]},{plugins:{legend:{display:true,labels:{color:'#5A5750',font:{size:10},boxWidth:10}}}});
+    bc('chartCartera','doughnut',{labels:['Al día','Mora 1-30d','Mora 31-90d','Mora +90d'],datasets:[{data:[682,28.5,33.5,27.5],backgroundColor:[a80(CGN),a80(CAM),a80(COR),a80(CRD)],borderWidth:0}]},{plugins:{legend:{display:true,position:'bottom',labels:{color:'#5A5750',font:{size:10},boxWidth:10,padding:10}}}});
+  }
+  if(pid==='ceo-ocupancia'){
+    bc('chartOcuTend','line',{labels:['Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic','Ene','Feb','Mar'],datasets:[{label:'Ocupancia %',data:[78,79,80,82,81,83,82,84,83,85,83,84],borderColor:COR,backgroundColor:a20(COR),fill:true,tension:.4,pointRadius:3,pointBackgroundColor:COR}]},{plugins:{legend:{display:false}}});
+  }
+  if(pid==='ceo-proyecciones'){
+    bc('chartProyIngresos','line',{labels:['Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic','Ene26','Feb26','Mar26'],datasets:[{label:'Real',data:[824,838,850,862,null,null,null,null,null,null,null,null],borderColor:CGN,backgroundColor:a20(CGN),fill:true,tension:.4,pointRadius:4},{label:'Proyectado',data:[null,null,null,862,875,890,905,920,940,1010,1050,1100],borderColor:COR,backgroundColor:a20(COR),fill:true,tension:.4,pointRadius:4,borderDash:[5,4]}]},{plugins:{legend:{display:true,labels:{color:'#5A5750',font:{size:10},boxWidth:10}}}});
+    bc('chartROI','bar',{labels:['Grupo A','Fondo B','Inv. C'],datasets:[{label:'ROI actual',data:[18.4,16.9,16.8],backgroundColor:[a80(COR),a80(CNV),a80(CAM)],borderRadius:6}]},{plugins:{legend:{display:false}},scales:{y:{ticks:{callback:v=>v+'%'}}}});
+  }
+  if(pid==='fin-dashboard'){
+    bc('chartFinCartera','doughnut',{labels:['Al día $682M','Mora 1-30d $28.5M','Mora 31-90d $33.5M','Mora +90d $27.5M'],datasets:[{data:[682,28.5,33.5,27.5],backgroundColor:[a80(CGN),a80(CAM),a80(COR),a80(CRD)],borderWidth:0}]},{plugins:{legend:{display:true,position:'bottom',labels:{color:'#5A5750',font:{size:9},boxWidth:8,padding:8}}}});
+    bc('chartFinRecaudo','bar',{labels:['Oct','Nov','Dic','Ene','Feb','Mar'],datasets:[{label:'Recaudado $M',data:[790,808,820,795,810,824],backgroundColor:a80(CGN),borderRadius:5}]},{plugins:{legend:{display:false}}});
+    bc('chartFinMora','bar',{labels:['Plaza Mayor','Centro Norte','Paseo Valle'],datasets:[{label:'Mora $M',data:[32.5,78.4,31.1],backgroundColor:[a80(CAM),a80(CRD),a80(CAM)],borderRadius:5}]},{plugins:{legend:{display:false}}});
+  }
+  if(pid==='fin-obra'){
+    bc('chartFinObraEjec','bar',{labels:['Torre Norte — F2','Expansión Paseo'],datasets:[{label:'Presupuesto',data:[3940,3000],backgroundColor:a40(CNV),borderRadius:5},{label:'Ejecutado',data:[2840,1290],backgroundColor:a80(COR),borderRadius:5}]},{plugins:{legend:{display:true,labels:{color:'#5A5750',font:{size:10},boxWidth:10}}}});
+    bc('chartFinObraFlujo','line',{labels:['Oct','Nov','Dic','Ene','Feb','Mar','Abr','May'],datasets:[{label:'Torre Norte',data:[380,420,380,450,410,390,480,null],borderColor:COR,tension:.4,pointRadius:3,pointBackgroundColor:COR},{label:'Paseo Valle',data:[180,210,190,220,200,290,null,null],borderColor:CNV,tension:.4,pointRadius:3,pointBackgroundColor:CNV}]},{plugins:{legend:{display:true,labels:{color:'#5A5750',font:{size:10},boxWidth:10}}}});
+  }
+  if(pid==='comercial-crm'){
+    bc('chartCrm','bar',{labels:['Nuevo','Visita','Nego.','Cierre'],datasets:[{label:'Prospectos',data:[24,14,7,3],backgroundColor:[a80(CNV),a80(CAM),a80(COR),a80(CGN)],borderRadius:6}]},{plugins:{legend:{display:false}},scales:{y:{display:false},x:{grid:{display:false},ticks:{color:'#A09D98',font:{size:10}}}}});
+  }
+  if(pid==='interventor'){
+    bc('chartIntTorre','bar',{labels:['Ciment.','Estructura','Fachada','Acabados','Instal.'],datasets:[{label:'Plan %',data:[100,100,90,60,35],backgroundColor:a40(COR),borderRadius:4},{label:'Real %',data:[100,100,85,40,20],backgroundColor:a80(COR),borderRadius:4}]},{plugins:{legend:{display:true,labels:{color:'#5A5750',font:{size:10},boxWidth:10}}}});
+    bc('chartIntPaseo','bar',{labels:['Permisos','Ciment.','Estructura','Fachada','Acabados'],datasets:[{label:'Plan %',data:[100,100,60,0,0],backgroundColor:a40(CNV),borderRadius:4},{label:'Real %',data:[100,100,55,0,0],backgroundColor:a80(CNV),borderRadius:4}]},{plugins:{legend:{display:true,labels:{color:'#5A5750',font:{size:10},boxWidth:10}}}});
+  }
+  if(pid==='ceo-cartera'){
+    bc('chartCarteraDonut','doughnut',{labels:['Al día','Mora 1–30d','Mora 31–90d','Mora +90d'],datasets:[{data:[682,28.5,33.5,27.5],backgroundColor:[a80(CGN),a80(CAM),a80(COR),a80(CRD)],borderWidth:0}]},{plugins:{legend:{display:true,position:'bottom',labels:{color:'#5A5750',font:{size:10},boxWidth:10,padding:10}}}});
+    bc('chartMoraAntiguedad','bar',{labels:['1–15 días','16–30 días','31–60 días','61–90 días','+90 días'],datasets:[{label:'Saldo en mora $M',data:[7.6,6.0,15.5,18.0,27.5],backgroundColor:[a80(CNV),a80(CAM),a80(CAM),a80(COR),a80(CRD)],borderRadius:6}]},{plugins:{legend:{display:false}},scales:{y:{ticks:{callback:v=>'$'+v+'M'}}}});
+  }
+  if(pid==='inversionistas'){
+    bc('chartInvROI','bar',{labels:['Grupo A','Fondo B','Inversionista C'],datasets:[{label:'ROI actual %',data:[18.4,16.9,16.8],backgroundColor:[a80(COR),a80(CNV),a80(CAM)],borderRadius:8},{label:'ROI proyectado %',data:[19.8,18.1,17.9],backgroundColor:[a20(COR),a20(CNV),a20(CAM)],borderRadius:8}]},{plugins:{legend:{display:true,labels:{color:'#5A5750',font:{size:10},boxWidth:10}}},scales:{y:{ticks:{callback:v=>v+'%'}}}});
+  }
+  if(pid==='inversionista'){
+    bc('chartInvEvol','line',{labels:['Abr25','Jul25','Oct25','Ene26','Mar26'],datasets:[{label:'Mi capital $M',data:[4800,4920,5100,5380,5680],borderColor:COR,backgroundColor:a20(COR),fill:true,tension:.4,pointRadius:5,pointBackgroundColor:COR}]},{plugins:{legend:{display:false}}});
+    bc('chartInvRoi','line',{labels:['Q2-25','Q3-25','Q4-25','Q1-26','Q2-26 est.'],datasets:[{label:'ROI real %',data:[15.8,16.2,17.1,18.4,null],borderColor:CGN,tension:.4,pointRadius:5,pointBackgroundColor:CGN},{label:'ROI proyectado %',data:[null,null,null,18.4,19.2],borderColor:COR,tension:.4,borderDash:[5,4],pointRadius:5,pointBackgroundColor:COR}]},{plugins:{legend:{display:true,labels:{color:'#5A5750',font:{size:10},boxWidth:10}}},scales:{y:{ticks:{callback:v=>v+'%'}}}});
+  }
+}
+
+// ===== FILES =====
+function handleFile(inp,z){
+  Array.from(inp.files).forEach(f=>addFI(f,z));
+  showToast(inp.files.length+' archivo(s) cargado(s)','success');
+  inp.value='';
+}
+function handleDrop(e,z){
+  e.preventDefault();e.currentTarget.classList.remove('drag');
+  Array.from(e.dataTransfer.files).forEach(f=>addFI(f,z));
+  showToast('Archivo(s) recibido(s)','success');
+}
+function addFI(f,z){
+  const list=document.getElementById('files-'+z);if(!list)return;
+  const ext=f.name.split('.').pop().toLowerCase();
+  const ic=ext==='pdf'?'fpdf':ext==='csv'?'fcsv':ext==='xlsx'||ext==='xls'?'fxls':'fimg';
+  const svgC=ext==='pdf'?CRD:ext==='csv'?CGN:ext==='xlsx'||ext==='xls'?CAM:CNV;
+  const sz=f.size>1048576?(f.size/1048576).toFixed(1)+' MB':(f.size/1024).toFixed(0)+' KB';
+  const item=document.createElement('div');item.className='fitem';
+  item.innerHTML=`<div class="fic ${ic}"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="${svgC}" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div><span class="fn">${f.name}</span><span class="fs">${sz}</span><button class="fdel" onclick="this.closest('.fitem').remove();showToast('Eliminado','info')"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>`;
+  list.appendChild(item);
+}
+
+// ===== COBRANZA =====
+function filterMora(etapa){
+  const rows=document.querySelectorAll('#mora-tbody tr');
+  rows.forEach(r=>{r.style.display=(!etapa||r.dataset.etapa===etapa)?'':'none';});
+  document.getElementById('mora-filter-badge').textContent=etapa?etapa.charAt(0).toUpperCase()+etapa.slice(1):'Todos';
+  showToast('Filtro: '+etapa,'info');
+}
+function sendWA(name){showToast('WhatsApp enviado a: '+name+' · "Recordatorio de pago pendiente"','success');}
+function sendEmail(name){showToast('Correo enviado a: '+name+' · Notificación de mora','success');}
+function scheduleVisit(name){showToast('Visita programada para: '+name+' · Notificación enviada al gestor','success');}
+
+// ===== AGENTES =====
+function toggleAgente(id,hdr){
+  const body=document.getElementById(id);
+  if(!body)return;
+  const open=body.style.display!=='none'&&body.style.display!=='';
+  body.style.display=open?'none':'table-row-group';
+  const arrow=hdr?hdr.querySelector('.ag-arrow'):null;
+  if(arrow)arrow.style.transform=open?'rotate(0deg)':'rotate(90deg)';
+}
+
+// ===== EXPORT CSV =====
+function exportCSV(){
+  const rows=document.querySelectorAll('#mora-tbody tr');
+  const headers=['Titular','Codeudor','Local','Días mora','Saldo','Etapa','Última gestión'];
+  const lines=[headers.join(',')];
+  rows.forEach(r=>{
+    const cells=r.querySelectorAll('td');
+    if(!cells.length)return;
+    const row=[
+      cells[0]?cells[0].textContent.trim().replace(/,/g,';'):'',
+      cells[1]?cells[1].textContent.trim().replace(/,/g,';'):'',
+      cells[2]?cells[2].textContent.trim():'',
+      cells[3]?cells[3].textContent.trim():'',
+      cells[4]?cells[4].textContent.trim():'',
+      cells[5]?cells[5].textContent.trim():'',
+      cells[6]?cells[6].textContent.trim().replace(/,/g,';'):''
+    ];
+    lines.push(row.join(','));
+  });
+  const blob=new Blob(['\uFEFF'+lines.join('\r\n')],{type:'text/csv;charset=utf-8;'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');a.href=url;a.download='mora_cartera_'+new Date().toISOString().slice(0,10)+'.csv';
+  document.body.appendChild(a);a.click();
+  setTimeout(()=>{URL.revokeObjectURL(url);a.remove();},500);
+  showToast('CSV exportado correctamente','success');
+}
+
+// ===== INV MODAL =====
+const INV_DATA={
+  'Grupo A':{capital:'$12.400M',roi:'18.4%',part:'42.1%',abonos:[['Mar 2026','Rendimiento mensual','$189M'],['Feb 2026','Rendimiento mensual','$185M'],['Ene 2026','Rendimiento mensual','$176M'],['Dic 2025','Rendimiento + bono trim.','$310M'],['Nov 2025','Rendimiento mensual','$168M']]},
+  'Fondo B':{capital:'$9.800M',roi:'16.9%',part:'33.3%',abonos:[['Mar 2026','Rendimiento mensual','$149M'],['Feb 2026','Rendimiento mensual','$144M'],['Ene 2026','Rendimiento mensual','$138M'],['Dic 2025','Rendimiento + bono trim.','$244M'],['Nov 2025','Rendimiento mensual','$131M']]},
+  'Inversionista C':{capital:'$7.200M',roi:'16.8%',part:'24.5%',abonos:[['Mar 2026','Rendimiento mensual','$110M'],['Feb 2026','Rendimiento mensual','$106M'],['Ene 2026','Rendimiento mensual','$101M'],['Dic 2025','Rendimiento + bono trim.','$180M'],['Nov 2025','Rendimiento mensual','$97M']]}
+};
+function openInvModal(key){
+  const d=INV_DATA[key];if(!d)return;
+  const el=document.getElementById('modal-inv');
+  if(!el){showToast('Modal de inversionista no encontrado','error');return;}
+  document.getElementById('inv-modal-name').textContent=key;
+  document.getElementById('inv-modal-capital').textContent=d.capital;
+  document.getElementById('inv-modal-roi').textContent=d.roi;
+  document.getElementById('inv-modal-part').textContent=d.part;
+  const tbody=document.getElementById('inv-modal-tbody');
+  tbody.innerHTML=d.abonos.map(([f,c,v])=>`<tr><td>${f}</td><td>${c}</td><td style="font-family:'DM Mono',monospace;color:var(--gn)">${v}</td></tr>`).join('');
+  el.style.display='flex';
+}
+
+// ===== MODAL =====
+function openModal(id){document.getElementById(id).style.display='flex';}
+function closeModal(id){document.getElementById(id).style.display='none';}
+
+// ===== TOAST =====
+function showToast(msg,type){
+  const tw=document.getElementById('tw');
+  const t=document.createElement('div');t.className='toast '+(type||'');
+  const colors={success:CGN,error:CRD,info:'#9aaee0'};
+  t.innerHTML=`<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="${colors[type]||COR}" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>${msg}`;
+  tw.appendChild(t);
+  setTimeout(()=>{t.style.cssText='opacity:0;transform:translateY(8px);transition:all .3s';setTimeout(()=>t.remove(),300);},3200);
+}
+
+// ===== SHARE =====
+function shareURL(){
+  navigator.clipboard.writeText(window.location.href)
+    .then(()=>showToast('Enlace copiado al portapapeles','success'))
+    .catch(()=>showToast('No se pudo copiar el enlace','error'));
+}
+
+// ===== DARK MODE =====
+function toggleDark(){
+  const isDark=document.documentElement.classList.toggle('dark');
+  localStorage.setItem('ef_dark',isDark?'1':'0');
+  const icon=document.getElementById('dark-icon');
+  if(icon)icon.setAttribute('d',isDark
+    ?'M12 3v1m0 16v1m8.66-13l-.87.5M4.21 15.5l-.87.5M20.66 15.5l-.87-.5M4.21 8.5l-.87-.5M21 12h-1M4 12H3m15.36-6.36l-.71.71M6.34 17.66l-.71.71M17.66 17.66l.71.71M6.34 6.34l.71-.71M12 8a4 4 0 100 8 4 4 0 000-8z'
+    :'M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z');
+}
+
+// ===== DYNAMIC DATE =====
+(function(){
+  const d=new Date();
+  const dias=['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'];
+  const meses=['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
+  const str=`Hoy, ${dias[d.getDay()]} ${d.getDate()} ${meses[d.getMonth()]} ${d.getFullYear()} · Datos en tiempo real`;
+  const el=document.getElementById('tb-sub');
+  if(el)el.textContent=str;
+})();
+
+// ===== HANDLE FREE LOGIN =====
+document.querySelector('.l-btn').onclick=function(){
+  const email=document.getElementById('linp-email').value.trim();
+  const pass=document.getElementById('linp-pass').value.trim();
+  if(!email||!pass){showToast('Ingresa correo y contraseña','error');return;}
+  doLogin('CEO');
+};
+
+// ===== AUTO-LOGIN (sessionStorage → hash) =====
+(function(){
+  if(localStorage.getItem('ef_dark')==='1')toggleDark();
+  const saved=sessionStorage.getItem('ef_role');
+  const hash=window.location.hash.replace('#','');
+  const role=saved||(ROLES[hash]?hash:null);
+  if(role)doLogin(role);
+})();
+</script>
+</body>
+</html>
