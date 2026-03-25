@@ -156,6 +156,7 @@ html,body{height:100%;background:var(--bg);color:var(--tx);font-family:'DM Sans'
 .fgn{background:var(--gn);}
 .bch{display:flex;gap:9px;margin-top:3px;flex-wrap:wrap;}
 .bc{font-size:11px;color:var(--tx3);}
+.tbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;}
 .tbl{width:100%;border-collapse:collapse;font-size:13px;}
 .tbl th{font-size:11px;font-weight:500;color:var(--tx3);text-transform:uppercase;letter-spacing:.4px;padding:6px 9px;text-align:left;border-bottom:1.5px solid var(--bd);}
 .tbl td{padding:9px 9px;border-bottom:1px solid var(--sf2);}
@@ -318,6 +319,10 @@ input[type=file]{display:none;}
   .ham-btn{display:flex;align-items:center;justify-content:center;}
   .pc{padding:14px 14px;}
   .topbar{padding:11px 14px;}
+  .tbl{font-size:11px;}
+  .tbl td,.tbl th{padding:6px 5px;}
+  .fc,.card{padding:12px 10px;}
+  .hide-mobile{display:none;}
 }
 </style>
 </head>
@@ -475,12 +480,12 @@ input[type=file]{display:none;}
 </div>
 <div class="fc au3">
   <div class="ch"><span class="ct">Locales vacantes — oportunidad comercial</span><span class="badge bam">18 disponibles</span></div>
-  <table class="tbl"><thead><tr><th>Local</th><th>Centro</th><th>Área m²</th><th>Precio/mes</th><th>Días vacante</th><th>Estado</th></tr></thead><tbody>
+  <div class="tbl-wrap"><table class="tbl"><thead><tr><th>Local</th><th>Centro</th><th>Área m²</th><th>Precio/mes</th><th>Días vacante</th><th>Estado</th></tr></thead><tbody>
     <tr><td>Local 14A</td><td>Plaza Mayor</td><td>42</td><td style="font-family:'DM Mono',monospace">$3.570K</td><td><span class="tag tgn">12 días</span></td><td><span class="tag tor">En prospección</span></td></tr>
     <tr><td>Local 31C</td><td>Centro Norte</td><td>68</td><td style="font-family:'DM Mono',monospace">$4.896K</td><td><span class="tag tam">45 días</span></td><td><span class="tag tam">Sin prospecto</span></td></tr>
     <tr><td>Local 8B</td><td>Centro Norte</td><td>120</td><td style="font-family:'DM Mono',monospace">$8.640K</td><td><span class="tag trd">90 días</span></td><td><span class="tag trd">Urgente</span></td></tr>
     <tr><td>Local 2A</td><td>Paseo del Valle</td><td>35</td><td style="font-family:'DM Mono',monospace">$3.150K</td><td><span class="tag tgn">8 días</span></td><td><span class="tag tor">En prospección</span></td></tr>
-  </tbody></table>
+  </tbody></table></div>
 </div>
 </div>
 
@@ -544,12 +549,12 @@ input[type=file]{display:none;}
   </div>
   <div class="card">
     <div class="ch"><span class="ct">Mora destacada</span><span class="badge brd">11 activas</span></div>
-    <table class="tbl"><thead><tr><th>Arrendatario</th><th>Días</th><th>Saldo</th><th>Estado</th></tr></thead><tbody>
+    <div class="tbl-wrap"><table class="tbl"><thead><tr><th>Arrendatario</th><th>Días</th><th>Saldo</th><th>Estado</th></tr></thead><tbody>
       <tr><td>Moda Express S.A.</td><td>94</td><td style="font-family:'DM Mono',monospace">$18.4M</td><td><span class="tag trd">Crítico</span></td></tr>
       <tr><td>TechStore Colombia</td><td>62</td><td style="font-family:'DM Mono',monospace">$9.1M</td><td><span class="tag trd">Crítico</span></td></tr>
       <tr><td>Café Delicias</td><td>58</td><td style="font-family:'DM Mono',monospace">$6.2M</td><td><span class="tag tam">Seguimiento</span></td></tr>
       <tr><td>Librería Central</td><td>45</td><td style="font-family:'DM Mono',monospace">$4.5M</td><td><span class="tag tam">Seguimiento</span></td></tr>
-    </tbody></table>
+    </tbody></table></div>
   </div>
 </div>
 </div>
@@ -574,10 +579,10 @@ input[type=file]{display:none;}
 </div>
 <div class="fc au3">
   <div class="ch"><span class="ct">Detalle financiero por proyecto</span></div>
-  <table class="tbl"><thead><tr><th>Proyecto</th><th>Presupuesto</th><th>Ejecutado</th><th>% Ejec.</th><th>Saldo</th><th>Variación</th></tr></thead><tbody>
+  <div class="tbl-wrap"><table class="tbl"><thead><tr><th>Proyecto</th><th>Presupuesto</th><th>Ejecutado</th><th>% Ejec.</th><th>Saldo</th><th>Variación</th></tr></thead><tbody>
     <tr><td><strong>Torre Norte — F2</strong></td><td style="font-family:'DM Mono',monospace">$3.940M</td><td style="font-family:'DM Mono',monospace">$2.840M</td><td><span class="tag tor">72%</span></td><td style="font-family:'DM Mono',monospace">$1.100M</td><td><span class="tag tgn">+$40K</span></td></tr>
     <tr><td><strong>Expansión Paseo</strong></td><td style="font-family:'DM Mono',monospace">$3.000M</td><td style="font-family:'DM Mono',monospace">$1.290M</td><td><span class="tag tnv">43%</span></td><td style="font-family:'DM Mono',monospace">$1.710M</td><td><span class="tag trd">-$120K</span></td></tr>
-  </tbody></table>
+  </tbody></table></div>
 </div>
 </div>
 
@@ -620,13 +625,13 @@ input[type=file]{display:none;}
       <div class="os"><div class="osd"></div><div class="osl">Acabados</div></div>
       <div class="os"><div class="osd"></div><div class="osl">Instal.</div></div>
     </div>
-    <table class="tbl" style="margin-top:10px"><thead><tr><th>Etapa</th><th>Plan</th><th>Real</th><th>Var. días</th><th>Estado</th></tr></thead><tbody>
+    <div class="tbl-wrap"><table class="tbl" style="margin-top:10px"><thead><tr><th>Etapa</th><th>Plan</th><th>Real</th><th>Var. días</th><th>Estado</th></tr></thead><tbody>
       <tr><td>Cimentación</td><td>Sem 1–4</td><td>Sem 1–4</td><td><span class="tag tgn">0</span></td><td><span class="tag tgn">Completo</span></td></tr>
       <tr><td>Estructura</td><td>Sem 5–10</td><td>Sem 5–10</td><td><span class="tag tgn">0</span></td><td><span class="tag tgn">Completo</span></td></tr>
       <tr><td>Fachada</td><td>Sem 11–16</td><td>Sem 11–17</td><td><span class="tag tam">+7 días</span></td><td><span class="tag tor">En curso</span></td></tr>
       <tr><td>Acabados int.</td><td>Sem 14–20</td><td>Sem 15–?</td><td><span class="tag tam">+7 días</span></td><td><span class="tag tam">En proceso</span></td></tr>
       <tr><td>Instalaciones</td><td>Sem 17–22</td><td>Sem 18–?</td><td><span class="tag trd">+14 días</span></td><td><span class="tag tam">Iniciando</span></td></tr>
-    </tbody></table>
+    </tbody></table></div>
     <div style="margin-top:11px;padding-top:10px;border-top:1.5px solid var(--bd)">
       <div class="stat-row"><span class="sl">Presupuesto</span><span class="sv">$3.940M</span></div>
       <div class="stat-row"><span class="sl">Ejecutado</span><span class="sv" style="color:var(--or)">$2.840M (72%)</span></div>
@@ -644,13 +649,13 @@ input[type=file]{display:none;}
       <div class="os"><div class="osd"></div><div class="osl">Fachada</div></div>
       <div class="os"><div class="osd"></div><div class="osl">Acabados</div></div>
     </div>
-    <table class="tbl" style="margin-top:10px"><thead><tr><th>Etapa</th><th>Plan</th><th>Real</th><th>Var. días</th><th>Estado</th></tr></thead><tbody>
+    <div class="tbl-wrap"><table class="tbl" style="margin-top:10px"><thead><tr><th>Etapa</th><th>Plan</th><th>Real</th><th>Var. días</th><th>Estado</th></tr></thead><tbody>
       <tr><td>Permisos</td><td>Sem 1–3</td><td>Sem 1–3</td><td><span class="tag tgn">0</span></td><td><span class="tag tgn">Completo</span></td></tr>
       <tr><td>Cimentación</td><td>Sem 4–8</td><td>Sem 4–8</td><td><span class="tag tgn">0</span></td><td><span class="tag tgn">Completo</span></td></tr>
       <tr><td>Estructura</td><td>Sem 9–16</td><td>Sem 9–?</td><td><span class="tag tgn">0</span></td><td><span class="tag tor">En curso</span></td></tr>
       <tr><td>Fachada</td><td>Sem 14–20</td><td>—</td><td><span class="tag ttx">—</span></td><td><span class="tag ttx">Pendiente</span></td></tr>
       <tr><td>Acabados</td><td>Sem 18–28</td><td>—</td><td><span class="tag ttx">—</span></td><td><span class="tag ttx">Pendiente</span></td></tr>
-    </tbody></table>
+    </tbody></table></div>
     <div style="margin-top:11px;padding-top:10px;border-top:1.5px solid var(--bd)">
       <div class="stat-row"><span class="sl">Presupuesto</span><span class="sv">$3.000M</span></div>
       <div class="stat-row"><span class="sl">Ejecutado</span><span class="sv" style="color:var(--nv)">$1.290M (43%)</span></div>
@@ -770,12 +775,12 @@ input[type=file]{display:none;}
 </div>
 <div class="fc au2">
   <div class="ch"><span class="ct">Locales disponibles para arrendar</span><button class="btn btp btn-sm" onclick="openModal('modal-local')">+ Registrar interesado</button></div>
-  <table class="tbl"><thead><tr><th>Local</th><th>Centro</th><th>Área m²</th><th>Canon/mes</th><th>Días vacante</th><th>Prospecto asignado</th><th>Acción</th></tr></thead><tbody>
+  <div class="tbl-wrap"><table class="tbl"><thead><tr><th>Local</th><th>Centro</th><th>Área m²</th><th>Canon/mes</th><th>Días vacante</th><th>Prospecto asignado</th><th>Acción</th></tr></thead><tbody>
     <tr><td><strong>Local 14A</strong></td><td>Plaza Mayor</td><td>42</td><td style="font-family:'DM Mono',monospace">$3.570K</td><td><span class="tag tgn">12 días</span></td><td>Zara Colombia</td><td><button class="btn bts btn-sm" onclick="showToast('Ficha abierta: Local 14A','success')">Ver ficha</button></td></tr>
     <tr><td><strong>Local 31C</strong></td><td>Centro Norte</td><td>68</td><td style="font-family:'DM Mono',monospace">$4.896K</td><td><span class="tag tam">45 días</span></td><td>—</td><td><button class="btn btp btn-sm" onclick="openModal('modal-local')">Asignar</button></td></tr>
     <tr><td><strong>Local 8B</strong></td><td>Centro Norte</td><td>120</td><td style="font-family:'DM Mono',monospace">$8.640K</td><td><span class="tag trd">90 días</span></td><td>Nike Store</td><td><button class="btn bts btn-sm" onclick="showToast('Ficha abierta: Local 8B','success')">Ver ficha</button></td></tr>
     <tr><td><strong>Local 2A</strong></td><td>Paseo del Valle</td><td>35</td><td style="font-family:'DM Mono',monospace">$3.150K</td><td><span class="tag tgn">8 días</span></td><td>Óptica Colombiana</td><td><button class="btn bts btn-sm" onclick="showToast('Ficha abierta: Local 2A','success')">Ver ficha</button></td></tr>
-  </tbody></table>
+  </tbody></table></div>
 </div>
 </div>
 
@@ -801,7 +806,7 @@ input[type=file]{display:none;}
 
 <div class="fc au3">
   <div class="ch"><span class="ct">Deudores — gestión detallada</span><span id="mora-filter-badge" class="badge brd">Todos</span></div>
-  <table class="tbl" id="mora-table"><thead><tr><th>Titular</th><th>Codeudor</th><th>Local</th><th>Días mora</th><th>Saldo</th><th>Etapa</th><th>Última gestión</th><th>Acciones</th></tr></thead><tbody id="mora-tbody">
+  <div class="tbl-wrap"><table class="tbl" id="mora-table"><thead><tr><th>Titular</th><th>Codeudor</th><th>Local</th><th>Días mora</th><th>Saldo</th><th>Etapa</th><th>Última gestión</th><th>Acciones</th></tr></thead><tbody id="mora-tbody">
     <tr data-etapa="prejuridico"><td><strong>Moda Express S.A.</strong></td><td>Jorge Mena</td><td>23B C.Norte</td><td><strong style="color:var(--rd)">94</strong></td><td style="font-family:'DM Mono',monospace;color:var(--rd)">$18.4M</td><td><span class="tag trd">Pre-jurídico</span></td><td>22 Mar — WhatsApp</td><td><div style="display:flex;gap:4px;flex-wrap:wrap">
       <button class="btn bts btn-sm" onclick="sendWA('Moda Express')">📱 WhatsApp</button>
       <button class="btn bts btn-sm" onclick="sendEmail('Moda Express')">✉️ Email</button>
@@ -831,7 +836,7 @@ input[type=file]{display:none;}
     <tr data-etapa="preventiva"><td><strong>Farmacia Salud</strong></td><td>—</td><td>9A C.Norte</td><td><strong>12</strong></td><td style="font-family:'DM Mono',monospace">$1.9M</td><td><span class="tag tnv">Preventiva</span></td><td>24 Mar — Recordatorio</td><td><div style="display:flex;gap:4px;flex-wrap:wrap">
       <button class="btn bts btn-sm" onclick="sendWA('Farmacia Salud')">📱 WhatsApp</button>
     </div></td></tr>
-  </tbody></table>
+  </tbody></table></div>
 </div>
 
 <div class="r2 au4">
@@ -979,13 +984,13 @@ input[type=file]{display:none;}
   </div>
   <div class="card">
     <div class="ch"><span class="ct">Historial de abonos</span></div>
-    <table class="tbl"><thead><tr><th>Fecha</th><th>Concepto</th><th>Valor</th></tr></thead><tbody>
+    <div class="tbl-wrap"><table class="tbl"><thead><tr><th>Fecha</th><th>Concepto</th><th>Valor</th></tr></thead><tbody>
       <tr><td>Mar 2026</td><td>Rendimiento mensual</td><td style="font-family:'DM Mono',monospace;color:var(--gn)">$73M</td></tr>
       <tr><td>Feb 2026</td><td>Rendimiento mensual</td><td style="font-family:'DM Mono',monospace;color:var(--gn)">$71M</td></tr>
       <tr><td>Ene 2026</td><td>Rendimiento mensual</td><td style="font-family:'DM Mono',monospace;color:var(--gn)">$68M</td></tr>
       <tr><td>Dic 2025</td><td>Rendimiento + bono trim.</td><td style="font-family:'DM Mono',monospace;color:var(--gn)">$120M</td></tr>
       <tr><td>Nov 2025</td><td>Rendimiento mensual</td><td style="font-family:'DM Mono',monospace;color:var(--gn)">$65M</td></tr>
-    </tbody></table>
+    </tbody></table></div>
   </div>
 </div>
 
@@ -1018,7 +1023,7 @@ input[type=file]{display:none;}
 </div>
 <div class="fc au3">
   <div class="ch"><span class="ct">Top 10 deudores</span><span class="badge brd">Saldo mayor a $1M</span></div>
-  <table class="tbl"><thead><tr><th>#</th><th>Titular</th><th>Local</th><th>Días mora</th><th>Saldo</th><th>Etapa</th><th>Gestor</th></tr></thead><tbody>
+  <div class="tbl-wrap"><table class="tbl"><thead><tr><th>#</th><th>Titular</th><th>Local</th><th>Días mora</th><th>Saldo</th><th>Etapa</th><th>Gestor</th></tr></thead><tbody>
     <tr><td style="color:var(--tx3);font-size:12px">1</td><td><strong>Moda Express S.A.</strong></td><td>23B C.Norte</td><td><strong style="color:var(--rd)">94</strong></td><td style="font-family:'DM Mono',monospace;color:var(--rd)">$18.4M</td><td><span class="tag trd">Pre-jurídico</span></td><td>J. Torres</td></tr>
     <tr><td style="color:var(--tx3);font-size:12px">2</td><td><strong>TechStore Colombia</strong></td><td>12C Paseo</td><td><strong style="color:var(--rd)">182</strong></td><td style="font-family:'DM Mono',monospace;color:var(--rd)">$9.1M</td><td><span class="tag trd">Jurídico</span></td><td>J. Torres</td></tr>
     <tr><td style="color:var(--tx3);font-size:12px">3</td><td><strong>Café Delicias</strong></td><td>5A P.Mayor</td><td><strong style="color:var(--am)">58</strong></td><td style="font-family:'DM Mono',monospace;color:var(--am)">$6.2M</td><td><span class="tag tam">Extrajudicial</span></td><td>L. Gómez</td></tr>
@@ -1029,7 +1034,7 @@ input[type=file]{display:none;}
     <tr><td style="color:var(--tx3);font-size:12px">8</td><td><strong>Optica Visión</strong></td><td>7C P.Mayor</td><td><strong>10</strong></td><td style="font-family:'DM Mono',monospace">$1.6M</td><td><span class="tag tnv">Preventiva</span></td><td>M. Vera</td></tr>
     <tr><td style="color:var(--tx3);font-size:12px">9</td><td><strong>Helados Frío</strong></td><td>2A Paseo</td><td><strong>8</strong></td><td style="font-family:'DM Mono',monospace">$1.2M</td><td><span class="tag tnv">Preventiva</span></td><td>J. Torres</td></tr>
     <tr><td style="color:var(--tx3);font-size:12px">10</td><td><strong>Zapatería Paso</strong></td><td>6B C.Norte</td><td><strong>6</strong></td><td style="font-family:'DM Mono',monospace">$1.1M</td><td><span class="tag tnv">Preventiva</span></td><td>L. Gómez</td></tr>
-  </tbody></table>
+  </tbody></table></div>
 </div>
 </div>
 
@@ -1048,7 +1053,7 @@ input[type=file]{display:none;}
   </div>
   <div class="card">
     <div class="ch"><span class="ct">Resumen de portafolio</span></div>
-    <table class="tbl"><thead><tr><th>Inversionista</th><th>Capital</th><th>Part. %</th><th>ROI actual</th><th>Abono Mar</th><th></th></tr></thead><tbody>
+    <div class="tbl-wrap"><table class="tbl"><thead><tr><th>Inversionista</th><th>Capital</th><th>Part. %</th><th>ROI actual</th><th>Abono Mar</th><th></th></tr></thead><tbody>
       <tr>
         <td><strong>Grupo A</strong><div style="font-size:10px;color:var(--tx3)">Holding patrimonial</div></td>
         <td style="font-family:'DM Mono',monospace">$12.400M</td>
@@ -1073,7 +1078,7 @@ input[type=file]{display:none;}
         <td style="font-family:'DM Mono',monospace;color:var(--gn)">$110M</td>
         <td><button class="btn bts btn-sm" onclick="openInvModal('Inversionista C')">Ver detalle</button></td>
       </tr>
-    </tbody></table>
+    </tbody></table></div>
   </div>
 </div>
 </div>
@@ -1092,24 +1097,24 @@ input[type=file]{display:none;}
     <span class="badge brd">$89.5M</span>
     <button class="btn bts btn-sm" onclick="exportCSV()" style="margin-left:auto">⬇ Exportar CSV</button>
   </div>
-  <table class="tbl" id="mora-table"><thead><tr><th>Titular</th><th>Codeudor</th><th>Local</th><th>Días mora</th><th>Saldo</th><th>Etapa</th><th>Última gestión</th></tr></thead><tbody id="mora-tbody">
-    <tr data-etapa="prejuridico"><td><strong>Moda Express S.A.</strong></td><td>Jorge Mena</td><td>23B C.Norte</td><td><strong style="color:var(--rd)">94</strong></td><td style="font-family:'DM Mono',monospace;color:var(--rd)">$18.4M</td><td><span class="tag trd">Pre-jurídico</span></td><td>22 Mar — WhatsApp</td></tr>
-    <tr data-etapa="juridico"><td><strong>TechStore Colombia</strong></td><td>Ana Vera</td><td>12C Paseo</td><td><strong style="color:var(--rd)">182</strong></td><td style="font-family:'DM Mono',monospace;color:var(--rd)">$9.1M</td><td><span class="tag trd">Jurídico</span></td><td>18 Mar — Visita</td></tr>
-    <tr data-etapa="extrajudicial"><td><strong>Café Delicias</strong></td><td>—</td><td>5A P.Mayor</td><td><strong style="color:var(--am)">58</strong></td><td style="font-family:'DM Mono',monospace;color:var(--am)">$6.2M</td><td><span class="tag tam">Extrajudicial</span></td><td>21 Mar — Email</td></tr>
-    <tr data-etapa="extrajudicial"><td><strong>Librería Central</strong></td><td>Pedro Salcedo</td><td>4D C.Norte</td><td><strong style="color:var(--am)">45</strong></td><td style="font-family:'DM Mono',monospace;color:var(--am)">$4.5M</td><td><span class="tag tam">Extrajudicial</span></td><td>20 Mar — Llamada</td></tr>
-    <tr data-etapa="administrativa"><td><strong>Restaurante Mar</strong></td><td>—</td><td>11A P.Mayor</td><td><strong style="color:var(--am)">30</strong></td><td style="font-family:'DM Mono',monospace;color:var(--am)">$3.2M</td><td><span class="tag tam">Administrativa</span></td><td>23 Mar — WhatsApp</td></tr>
-    <tr data-etapa="administrativa"><td><strong>Joyería Oro Fino</strong></td><td>Sara Niño</td><td>3B Paseo</td><td><strong style="color:var(--am)">28</strong></td><td style="font-family:'DM Mono',monospace;color:var(--am)">$2.8M</td><td><span class="tag tam">Administrativa</span></td><td>22 Mar — Email</td></tr>
-    <tr data-etapa="preventiva"><td><strong>Farmacia Salud</strong></td><td>—</td><td>9A C.Norte</td><td><strong>12</strong></td><td style="font-family:'DM Mono',monospace">$1.9M</td><td><span class="tag tnv">Preventiva</span></td><td>24 Mar — Recordatorio</td></tr>
-  </tbody></table>
+  <div class="tbl-wrap"><table class="tbl" id="mora-table"><thead><tr><th>Titular</th><th>Codeudor</th><th>Local</th><th>Días mora</th><th>Saldo</th><th>Etapa</th><th class="hide-mobile">Última gestión</th></tr></thead><tbody id="mora-tbody">
+    <tr data-etapa="prejuridico"><td><strong>Moda Express S.A.</strong></td><td>Jorge Mena</td><td>23B C.Norte</td><td><strong style="color:var(--rd)">94</strong></td><td style="font-family:'DM Mono',monospace;color:var(--rd)">$18.4M</td><td><span class="tag trd">Pre-jurídico</span></td><td class="hide-mobile">22 Mar — WhatsApp</td></tr>
+    <tr data-etapa="juridico"><td><strong>TechStore Colombia</strong></td><td>Ana Vera</td><td>12C Paseo</td><td><strong style="color:var(--rd)">182</strong></td><td style="font-family:'DM Mono',monospace;color:var(--rd)">$9.1M</td><td><span class="tag trd">Jurídico</span></td><td class="hide-mobile">18 Mar — Visita</td></tr>
+    <tr data-etapa="extrajudicial"><td><strong>Café Delicias</strong></td><td>—</td><td>5A P.Mayor</td><td><strong style="color:var(--am)">58</strong></td><td style="font-family:'DM Mono',monospace;color:var(--am)">$6.2M</td><td><span class="tag tam">Extrajudicial</span></td><td class="hide-mobile">21 Mar — Email</td></tr>
+    <tr data-etapa="extrajudicial"><td><strong>Librería Central</strong></td><td>Pedro Salcedo</td><td>4D C.Norte</td><td><strong style="color:var(--am)">45</strong></td><td style="font-family:'DM Mono',monospace;color:var(--am)">$4.5M</td><td><span class="tag tam">Extrajudicial</span></td><td class="hide-mobile">20 Mar — Llamada</td></tr>
+    <tr data-etapa="administrativa"><td><strong>Restaurante Mar</strong></td><td>—</td><td>11A P.Mayor</td><td><strong style="color:var(--am)">30</strong></td><td style="font-family:'DM Mono',monospace;color:var(--am)">$3.2M</td><td><span class="tag tam">Administrativa</span></td><td class="hide-mobile">23 Mar — WhatsApp</td></tr>
+    <tr data-etapa="administrativa"><td><strong>Joyería Oro Fino</strong></td><td>Sara Niño</td><td>3B Paseo</td><td><strong style="color:var(--am)">28</strong></td><td style="font-family:'DM Mono',monospace;color:var(--am)">$2.8M</td><td><span class="tag tam">Administrativa</span></td><td class="hide-mobile">22 Mar — Email</td></tr>
+    <tr data-etapa="preventiva"><td><strong>Farmacia Salud</strong></td><td>—</td><td>9A C.Norte</td><td><strong>12</strong></td><td style="font-family:'DM Mono',monospace">$1.9M</td><td><span class="tag tnv">Preventiva</span></td><td class="hide-mobile">24 Mar — Recordatorio</td></tr>
+  </tbody></table></div>
 </div>
 <div class="fc au3">
   <div class="ch"><span class="ct">Acuerdos de pago vigentes</span><span class="badge bnv">4 activos</span></div>
-  <table class="tbl"><thead><tr><th>Titular</th><th>Saldo total</th><th>Cuotas pactadas</th><th>Próximo pago</th><th>Valor cuota</th><th>Estado</th></tr></thead><tbody>
+  <div class="tbl-wrap"><table class="tbl"><thead><tr><th>Titular</th><th>Saldo total</th><th>Cuotas pactadas</th><th>Próximo pago</th><th>Valor cuota</th><th>Estado</th></tr></thead><tbody>
     <tr><td><strong>Café Delicias</strong></td><td style="font-family:'DM Mono',monospace">$6.2M</td><td>3 cuotas mensuales</td><td style="color:var(--am)">28 Mar 2026</td><td style="font-family:'DM Mono',monospace;color:var(--nv)">$2.1M</td><td><span class="tag tnv">Al día</span></td></tr>
     <tr><td><strong>Librería Central</strong></td><td style="font-family:'DM Mono',monospace">$4.5M</td><td>2 cuotas mensuales</td><td style="color:var(--am)">5 Abr 2026</td><td style="font-family:'DM Mono',monospace;color:var(--nv)">$2.25M</td><td><span class="tag tnv">Al día</span></td></tr>
     <tr><td><strong>Restaurante Mar</strong></td><td style="font-family:'DM Mono',monospace">$3.2M</td><td>4 cuotas mensuales</td><td style="color:var(--or)">1 Abr 2026</td><td style="font-family:'DM Mono',monospace;color:var(--nv)">$0.8M</td><td><span class="tag tam">En seguimiento</span></td></tr>
     <tr><td><strong>Farmacia Salud</strong></td><td style="font-family:'DM Mono',monospace">$1.9M</td><td>2 cuotas mensuales</td><td>15 Abr 2026</td><td style="font-family:'DM Mono',monospace;color:var(--nv)">$0.95M</td><td><span class="tag tnv">Al día</span></td></tr>
-  </tbody></table>
+  </tbody></table></div>
 </div>
 </div>
 
@@ -1123,7 +1128,7 @@ input[type=file]{display:none;}
 </div>
 <div class="fc au2">
   <div class="ch"><span class="ct">Vista por agente</span><span class="badge bnv">3 agentes</span></div>
-  <table class="tbl" style="border-collapse:collapse">
+  <div class="tbl-wrap"><table class="tbl" style="border-collapse:collapse">
 
     <!-- AGENTE MR -->
     <thead>
@@ -1189,7 +1194,7 @@ input[type=file]{display:none;}
       <tr><td style="padding:8px 12px;color:var(--tx3)" colspan="4">+ 9 prospectos en etapas iniciales</td></tr>
     </tbody>
 
-  </table>
+  </table></div>
 </div>
 </div>
 
@@ -1262,9 +1267,9 @@ input[type=file]{display:none;}
       </div>
     </div>
     <div style="font-size:12px;font-weight:600;color:var(--tx2);margin-bottom:8px">Historial de abonos</div>
-    <table class="tbl"><thead><tr><th>Fecha</th><th>Concepto</th><th>Valor</th></tr></thead>
+    <div class="tbl-wrap"><table class="tbl"><thead><tr><th>Fecha</th><th>Concepto</th><th>Valor</th></tr></thead>
       <tbody id="inv-modal-tbody"></tbody>
-    </table>
+    </table></div>
     <div class="faction" style="margin-top:16px">
       <button class="btn btp" onclick="showToast('Descargando reporte del inversionista...','success')">Descargar PDF</button>
       <button class="btn bts" onclick="closeModal('modal-inv')">Cerrar</button>
